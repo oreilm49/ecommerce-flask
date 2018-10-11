@@ -6,6 +6,23 @@ from sqlalchemy import create_engine
 
 Base = declarative_base()
 
+
+class Catalog(Base):
+    __tablename__ = 'catalog'
+    id = Column(Integer, primary_key = True)
+    name = Column(String(80), nullable = False)
+    image = Column(String(250), nullable = False)
+    tagline = Column(String(250))
+    @property
+    def serialize(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'image': self.image,
+            'tagline': self.tagline,
+        }
+
+
 class Product(Base):
     __tablename__ = 'product'
     id = Column(Integer, primary_key = True)
@@ -27,24 +44,6 @@ class Product(Base):
         }
 
 
-class Catalog(Base):
-    __tablename__ = 'catalog'
-    id = Column(Integer, primary_key = True)
-    name = Column(String(80), nullable = False)
-    image = Column(String(250), nullable = False)
-    tagline = Column(String(250))
-    @property
-    def serialize(self):
-        return {
-            'id': self.id,
-            'name': self.name,
-            'image': self.image,
-            'tagline': self.tagline,
-        }
-
-
-engine = create_engine('sqlite:///restaurantmenu.db')
+engine = create_engine('sqlite:///ecommerceapp.db')
 Base.metadata.create_all(engine)
 DBSession = sessionmaker(bind = engine)
-session = DBSession()
-restaurants = session.query(Restaurant).all()
