@@ -44,6 +44,21 @@ class Product(Base):
         }
 
 
+class User(Base):
+    __tablename__ = 'user'
+    id = Column(Integer, primary_key = True)
+    name = Column(String(80), nullable = False)
+    email = Column(String(250), nullable = False)
+    password = Column(String(250), nullable = False)
+    @property
+    def serialize(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'email': self.email,
+        }
+
+
 engine = create_engine('sqlite:///ecommerceapp.db')
 Base.metadata.create_all(engine)
 DBSession = sessionmaker(bind = engine)
