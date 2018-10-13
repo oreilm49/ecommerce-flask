@@ -18,7 +18,12 @@ class ProductModel():
         image = product['image']
         description = product['description']
         category = session.query(Catalog).filter_by(name=product['category'])
-        newProduct = Product(name=name,price=price,image=image,description=description,catalog=category)
+        newProduct = Product(
+            name=name,
+            price=price,
+            image=image,
+            description=description,
+            catalog=category)
         try:
             session.add(newProduct)
             session.commit()
@@ -44,13 +49,19 @@ class ProductModel():
         image = product['image']
         description = product['description']
         category = session.query(Catalog).filter_by(name=product['category'])
-        editedProduct = Product(name=name,price=price,image=image,description=description,catalog=category)
+        editedProduct = Product(
+            id=id,
+            name=name,
+            price=price,
+            image=image,
+            description=description,
+            catalog=category)
         try:
             session.add(editedProduct)
             session.commit()
-            return "Product created"
+            return "Product with id %s updated" % id
         except exc.SQLAlchemyError:
-            return "Product not created"
+            return "Product with id %s not updated" % id
 
     def deleteProduct(self,id):
         try:
@@ -58,24 +69,63 @@ class ProductModel():
             session.commit()
             return "Product with id of %s deleted" % id
         except:
-            return "SQL Error: product not deleted"
+            return "SQL Error: roduct with id of %s not deleted"
 
 # CRUD Catalog
 class CatalogModel():
     def createCatalog(self, catalog):
-        return "Catalog created"
+        name = catalog['name']
+        image = catalog['image']
+        tagline = catalog['tagline']
+        newCatalog = Catalog(
+            name=name,
+            image=image,
+            tagline=tagline)
+        try:
+            session.add(newCatalog)
+            session.commit()
+            return "New Catalog created"
+        except exc.SQLAlchemyError:
+            return "Catalog not created"
 
     def catalogs(self):
-        return session.query(Catalog).all()
+        catalogs = session.query(Catalog).all()
+        session.commit()
+        return catalogs
 
     def catalog(self, id):
-        return "Catalog"
+        try:
+            catalog = session.query(Catalog).filter_by(id=id).one()
+            session.commit()
+            return catalog
+        except:
+            return "Catalog with id %s not found" % id
 
-    def updateCatalog(self, product):
-        return "Catalog updated"
+    def updateCatalog(self, catalog):
+        id = catalog['id']
+        name = catalog['name']
+        image = catalog['image']
+        tagline = catalog['tagline']
+        editedCatalog = Catalog(
+            id=id,
+            name=name,
+            image=image,
+            tagline=tagline)
+        try:
+            session.add(editedCatalog)
+            session.commit()
+            return "Catalog with id %s updated" % id
+        except exc.SQLAlchemyError:
+            return "Catalog with id %s not updated" % id
+
 
     def deleteCatalog(self, id):
-        return "Catalog deleted"
+        try:
+            session.query(Catalog).filter_by(id=id).delete()
+            session.commit()
+            return "Catalog with id of %s deleted" % id
+        except:
+            return "SQL Error: catalog with id of %s not deleted"
 
 
 # CRUD User
