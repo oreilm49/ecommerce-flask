@@ -1,4 +1,4 @@
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, exc
 from sqlalchemy.orm import sessionmaker
 from database import Catalog, Product, Base
 
@@ -12,25 +12,57 @@ session = DBSession()
 
 # CRUD Products
 class ProductModel():
-    def createProduct(self):
-        return "product created"
+    def createProduct(self, product):
+        name = product['name']
+        price = product['price']
+        image = product['image']
+        description = product['description']
+        category = session.query(Catalog).filter_by(name=product['category'])
+        newProduct = Product(name=name,price=price,image=image,description=description,catalog=category)
+        try:
+            session.add(newProduct)
+            session.commit()
+            return "New product created"
+        except exc.SQLAlchemyError:
+            return "Product not created"
 
     def products(self,category):
-        return "products"
+        catalog = session.query(Catalog).filter_by(name=category)
+        products = session.query(Product).filter_by(catalog_id=catalog.id)
+        session.commit()
+        return products
 
     def product(self,id):
-        return "I'm a product"
+        product = session.query(Product).filter_by(id=id).one()
+        session.commit()
+        return product
 
     def updateProduct(self,product):
-        return "product updated"
+        id = product['id']
+        name = product['name']
+        price = product['price']
+        image = product['image']
+        description = product['description']
+        category = session.query(Catalog).filter_by(name=product['category'])
+        editedProduct = Product(name=name,price=price,image=image,description=description,catalog=category)
+        try:
+            session.add(editedProduct)
+            session.commit()
+            return "Product created"
+        except exc.SQLAlchemyError:
+            return "Product not created"
 
     def deleteProduct(self,id):
-        return "product deleted"
-
+        try:
+            session.query(Product).filter_by(id=id).delete()
+            session.commit()
+            return "Product with id of %s deleted" % id
+        except:
+            return "SQL Error: product not deleted"
 
 # CRUD Catalog
 class CatalogModel():
-    def createCatalog(self):
+    def createCatalog(self, catalog):
         return "Catalog created"
 
     def catalogs(self):
@@ -48,7 +80,7 @@ class CatalogModel():
 
 # CRUD User
 class UserModel():
-    def createUser(self):
+    def createUser(self, user):
         return "User created"
 
     def users(self,category):

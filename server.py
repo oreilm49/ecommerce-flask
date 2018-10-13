@@ -28,14 +28,50 @@ def categoryCatalogJSON(category):
     products = ProductModel().products(category)
     return jsonify(products=[i.serialize for i in products])
 
-"""
-Admin Routes
-    1. home: renders the admin dashboard    www.site.com/dashboard
-    2. User: update user information        www.site.com/dashboard/user
-    3. Models: update database information  www.site.com/dashboard/models
-    4. Category: CRUD for categories        www.site.com/dashboard/category
-    5. Product: CRUD for products           www.site.com/dashboard/product
-"""
+# Admin home route
+@app.route('/admin/<int:user_id>', methods=['GET','PUT','POST','DELETE'])
+def adminHome(user_id):
+    catalogs = CatalogModel().catalogs()
+    if request.method == 'PUT':
+        CatalogModel().updateCatalog(request.form)
+    elif request.method == 'POST':
+        CatalogModel().createCatalog(request.form)
+    elif request.method == 'DELETE':
+        CatalogModel().deleteCatalog(request.form['id'])
+    else:
+        return render_template('index.html',catalogs=catalogs)
+
+# Admin category products view
+@app.route('/admin/<category>/products')
+def adminProducts(category):
+    products = ProductModel().products(category)
+    return render_template('admin/category.html',products=products)
+
+# Admin products crud route
+@app.route('/admin/product/<int:product_id>', methods=['GET','PUT','POST','DELETE'])
+def productView(product_id):
+    product = ProductModel().product(product_id)
+    if request.method == 'PUT':
+        ProductModel().updateProduct(request.form)
+    elif request.method == 'POST':
+        ProductModel().createProduct(request.form)
+    elif request.method == 'DELETE':
+        ProductModel().deleteProduct(request.form['id'])
+    else:
+        return render_template('admin/product.html',product=product)
+
+# Admin products crud route
+@app.route('/admin/product/<int:user_id>', methods=['GET','PUT','POST','DELETE'])
+def userView(user_id):
+    user = UserModel().user(user_id)
+    if request.method == 'PUT':
+        UserModel().updateUser(request.form)
+    elif request.method == 'POST':
+        UserModel().createUser(request.form)
+    elif request.method == 'DELETE':
+        UserModel().deleteUser(request.form['id'])
+    else:
+        return render_template('admin/user.html',user=user)
 
 
 if __name__ == '__main__':
