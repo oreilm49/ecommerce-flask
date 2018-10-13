@@ -3,7 +3,7 @@ from sqlalchemy.orm import sessionmaker
 from database import Catalog, Product, Base
 
 
-engine = create_engine('sqlite:///restaurantmenu.db')
+engine = create_engine('sqlite:///ecommerceapp.db')
 Base.metadata.bind = engine
 
 
@@ -33,8 +33,8 @@ class CatalogModel():
     def createCatalog(self):
         return "Catalog created"
 
-    def catalogs(self, category):
-        return "Catalogs"
+    def catalogs(self):
+        return session.query(Catalog).all()
 
     def catalog(self, id):
         return "Catalog"
