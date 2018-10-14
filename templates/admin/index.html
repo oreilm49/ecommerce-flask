@@ -1,27 +1,27 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Admin Dashboard</title>
-</head>
-<body>
-        <h1>Ecommerce App Admin Site</h1>
-        <div class="catalogs">
-            <h3>Product Catalogs</h3>
-            <p>Catalogs are used to group products together.
-            This facilitates a simple navigation experience for the user on the client website.</p>
-            {% for i in catalogs %}
-                <div class="catalog">
-                    <div class="catalog-name">{{i.name}}</div>
-                    <a href="{{ url_for('adminCatalog',catalog_id=i.id) }}">Edit</a>
-                    <a href="{{ url_for('deleteCatalog',catalog_id=i.id) }}">Delete</a>
-                    <a href="{{ url_for('adminProducts',catalog_id=i.id) }}">Products</a>
-                </div>
-            {% endfor %}
-        </div>
-        <a href="/admin/catalog/new">Click here to create a new catalog</a>
+{% extends 'base_admin.html' %}
 
-</body>
-</html>
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<h1>Ecommerce App Admin Site</h1>
+<div class="catalogs">
+    <h3>Product Catalogs</h3>
+    <p>Catalogs are used to group products together.
+    This facilitates a simple navigation experience for the user on the client website.</p>
+
+    <div class="catalog-grid">
+        {% for i in catalogs %}
+        <div class="catalog-item">
+            <a href="{{ url_for('adminProducts',catalog_id=i.id) }}"><i class="fas fa-folder"></i></a>
+            <div class="catalog-name">{{i.name}}</div>
+            <a href="{{ url_for('adminCatalog',catalog_id=i.id) }}">Edit</a>
+            <a href="{{ url_for('deleteCatalog',catalog_id=i.id) }}">Delete</a>
+            <a href="{{ url_for('adminProducts',catalog_id=i.id) }}">Products</a>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+<br>
+<p>Create a new catalog:</p>
+<a href="/admin/catalog/new"><i class="fas fa-folder-plus success"></i></a>
+{% endblock %}

@@ -1,23 +1,27 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>New Catalog</title>
-</head>
-<body>
-    <h1>Create a new catalog below</h1>
+{% extends 'base_admin.html' %}
+
+{% block title %}Admin - New Catalog{% endblock %}
+
+{% block content %}
+    <h1>Create a new product</h1>
+    <a href="/admin"><button class="btn btn-outline-secondary">back</button></a>
+
     <form action= "{{url_for('newCatalog')}}" method='POST'>
-        <p>Name:</p>
-        <input type = 'text' size='30' name = 'name'>
-        <p>Image Link:</p>
-        <input type = 'text' size='30' name = 'image'>
-        <p>Tagline:</p>
-        <input type = 'text' size='30' name = 'tagline'>
-        <br>
-        <input type='submit' value='Create'>
+        <div class="form-group">
+            <label for="catalogNameInput">Name:</label>
+            <input id="catalogNameInput" class="form-control" type = 'text' size='30' name = 'name'>
+        </div>
+
+        <div class="form-group">
+            <label for="catalogImageInput">Image Link:</label>
+            <input id="catalogImageInput" class="form-control" type = 'text' size='30' name = 'image'>
+        </div>
+
+        <div class="form-group">
+            <label for="catalogTaglineInput">Tagline:</label>
+            <input id="catalogTaglineInput" class="form-control"  type = 'text' size='30' name = 'tagline' >
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit</button>
     </form>
-    <a href= "/admin">Cancel</a>
-</body>
-</html>
+{% endblock %}

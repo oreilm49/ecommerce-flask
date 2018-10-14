@@ -1,17 +1,12 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
-</head>
-<body>
-        <h1>Delete {{catalog.name}}</h1>
-        <form action= "{{url_for('deleteCatalog', catalog_id = catalog.id)}}" method = 'POST'>
-            <p>Click below to delete:</p>
-            <input type='submit' value='Delete'>
-        </form>
-        <a href= "{{url_for('adminHome')}}">Cancel</a>
-    </body>
-</html>
+{% extends 'base_admin.html' %}
+
+{% block title %}Admin - Delete Product{% endblock %}
+
+{% block content %}
+<h1>Delete {{catalog.name}}</h1>
+<a href="{{url_for('adminHome')}}"><button class="btn btn-outline-secondary">back</button></a>
+<form action= "{{url_for('deleteCatalog', catalog_id = catalog.id)}}" method = 'POST'>
+    <p>Click below to delete:</p>
+    <button type="submit" class="btn btn-danger">Delete</button>
+</form>
+{% endblock %}
