@@ -1,15 +1,35 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Ecommerce App</title>
-</head>
-<body>
-    <h1>Home page</h1>
-    {% for i in catalogs %}
-        <a href="{{ url_for('categoryCatalog', catalog_id = i.id) }}">{{i.name}}</a>
+{% extends 'base_client.html' %}
+
+{% block title %}Ecommerce App - Home{% endblock %}
+
+{% block navlinks %}
+    {% for c in catalogs %}
+    <a class="dropdown-item" href="{{ url_for('categoryCatalog',catalog_id=c.id) }}">{{c.name}}</a>
     {% endfor %}
-</body>
-</html>
+{% endblock %}
+
+{% block content %}
+    <div class="carousel slide">
+        <div class="carousel-inner">
+            {% for c in catalogs %}
+                <div class="carousel-item {% if loop.index == 1 %} active{% endif %}">
+                    <img class="d-block w-100" src="{{c.image}}" alt="{{c.name}}">
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="featured-products">
+        <h3>Featured Products</h3>
+        <div class="products">
+                {% for p in products[:12] %}
+                <div class="card">
+                    <img class="card-img-top" src="{{p.image}}" alt="Card image cap">
+                    <div class="card-body">
+                        <h5 class="card-title">{{p.name}}</h5>
+                        <a href="{{ url_for('productPage',catalog_id=1,id=p.id) }}" class="btn btn-primary">View</a>
+                    </div>
+                </div>
+                {% endfor %}
+        </div>
+    </div>
+{% endblock %}

@@ -40,7 +40,6 @@ class ProductModel():
         DBSession = sessionmaker(bind=engine)
         session = DBSession()
         product = session.query(Product).filter_by(id=id).one()
-        session.commit()
         return product
 
     def updateProduct(self,product):
@@ -95,7 +94,6 @@ class CatalogModel():
         DBSession = sessionmaker(bind=engine)
         session = DBSession()
         catalogs = session.query(Catalog).all()
-        session.commit()
         return catalogs
 
     def catalog(self, id):

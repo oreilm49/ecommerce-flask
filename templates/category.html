@@ -1,21 +1,27 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Ecommerce - {{catalog.name}}</title>
-</head>
-<body>
-    <h1>{{catalog.name}}</h1>
-    <button><a href="/">Back</a></button>
-    {% for product in products %}
-    <div class="product">
-        <p class="model">{{product.name}}</p>
-        <div class="image"><img src={{product.image}} alt="product image"></div>
-        <div class="price">{{product.price}}</div>
-        <a href="{{ url_for('productPage',catalog_id=catalog.id,id=product.id) }}">View</a>
-    </div>
+{% extends 'base_client.html' %}
+
+{% block title %}Ecommerce {{catalog.name}}{% endblock %}
+
+{% block navlinks %}
+    {% for c in catalogs %}
+    <a class="dropdown-item" href="{{ url_for('categoryCatalog',catalog_id=c.id) }}">{{c.name}}</a>
     {% endfor %}
-</body>
-</html>
+{% endblock %}
+
+{% block content %}
+    <div class="featured-products">
+        <h3>{{catalog.name}}: Products</h3>
+        <div class="products">
+                {% for p in products %}
+                <div class="card">
+                    <img class="card-img-top" src="{{p.image}}" alt="{{p.image}}">
+                    <div class="card-body">
+                        <h5 class="card-title">{{p.name}}</h5>
+                        <p class="card-text">€ {{p.price}}</p>
+                        <a href="{{ url_for('productPage',catalog_id=1,id=p.id) }}" class="btn btn-primary">View</a>
+                    </div>
+                </div>
+                {% endfor %}
+        </div>
+    </div>
+{% endblock %}

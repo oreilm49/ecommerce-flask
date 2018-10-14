@@ -1,27 +1,34 @@
 from flask import Flask, render_template, request, url_for, redirect, flash, jsonify
 from model import ProductModel, CatalogModel, UserModel
+from sqlalchemy import create_engine, exc
+from sqlalchemy.orm import sessionmaker
+from database import Catalog, Product, Base
+
 
 app = Flask(__name__)
 
+# Defined once, used in each client template for nav links
+catalogs = CatalogModel().catalogs()
 
 # Home route
 @app.route('/')
 def index():
-    catalogs = CatalogModel().catalogs()
-    return render_template('index.html',catalogs=catalogs)
+    products = ProductModel().products(1)
+    return render_template('index.html',catalogs=catalogs,products=products)
 
 # Category page
 @app.route('/catalog/<int:catalog_id>/products')
 def categoryCatalog(catalog_id):
     products = ProductModel().products(catalog_id)
     catalog = CatalogModel().catalog(catalog_id)
-    return render_template('category.html',catalog=catalog,products=products)
+    return render_template('category.html',catalogs=catalogs,catalog=catalog,products=products)
 
 # Product page
 @app.route('/catalog/<int:catalog_id>/product/<int:id>')
 def productPage(catalog_id, id):
     product = ProductModel().product(id)
-    return render_template('product.html',product=product,catalog_id=catalog_id)
+    catalog = CatalogModel().catalog(catalog_id)
+    return render_template('product.html',catalogs=catalogs,product=product,catalog=catalog)
 
 # Products JSON
 @app.route('/catalog/<int:catalog_id>/products/JSON')

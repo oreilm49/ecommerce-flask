@@ -1,17 +1,23 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>{{product.name}}</title>
-</head>
-<body>
-    <h1>{{product.name}}</h1>
-    <button><a href="{{ url_for('categoryCatalog', catalog_id = catalog_id) }}">Back</a></button>
-    <div class="product">
-        <div class="image"><img src={{product.image}} alt="product image"></div>
-        <div class="price">{{product.price}}</div>
+{% extends 'base_client.html' %}
+
+{% block title %}Ecommerce: {{product.name}}{% endblock %}
+
+{% block navlinks %}
+    {% for c in catalogs %}
+    <a class="dropdown-item" href="{{ url_for('categoryCatalog',catalog_id=c.id) }}">{{c.name}}</a>
+    {% endfor %}
+{% endblock %}
+
+{% block content %}
+<div class="product-body">
+    <div class="product-header"><h2>{{catalog.name}} - {{product.name}}</h2></div>
+    <div class="product-image">
+        <img src="{{product.image}}" alt="">
     </div>
-</body>
-</html>
+    <div class="product-content">
+        <h3>€ {{product.price}}</h3>
+        <div class="description">{{product.description}}</div>
+    </div>
+</div>
+
+{% endblock %}
