@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>{{catalog.name}}, Product: {{product.name}}, </title>
+</head>
+<body>
+    <h1>Edit Product Page: {{product.name}}</h1>
+    <form action= "{{url_for('productView', catalog_id = catalog.id, product_id = product.id)}}" method='POST'>
+            <p>Name:</p>
+            <input type = 'text' size='30' name = 'name' placeholder = '{{product.name}}'>
+            <p>Image Link:</p>
+            <input type = 'text' size='30' name = 'image' placeholder = '{{product.image}}'>
+            <p>Description:</p>
+            <input type = 'text' size='30' name = 'description' placeholder = '{{product.description}}'>
+            <p>Price:</p>
+            <input type = 'text' size='30' name = 'price' placeholder = '{{product.price}}'>
+            <input type="hidden" name="id" value="{{product.id}}"/>
+            <br>
+            <input type='submit' value='Edit'>
+        </form>
+        <a href= "{{ url_for('adminProducts',catalog_id=catalog.id) }}">Cancel</a>
+</body>
+</html>

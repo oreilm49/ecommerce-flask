@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Delete Product</title>
+</head>
+<body>
+        <h1>Delete {{product.name}}</h1>
+        <form action= "{{url_for('deleteProduct', catalog_id = catalog.id, product_id = product.id)}}" method = 'POST'>
+            <p>Click below to delete:</p>
+            <input type='submit' value='Delete'>
+        </form>
+        <a href= "{{url_for('adminProducts', catalog_id = catalog.id)}}">Cancel</a>
+    </body>
+</html>

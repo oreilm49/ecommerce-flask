@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>New Catalog</title>
+</head>
+<body>
+    <h1>Create a new catalog below</h1>
+    <form action= "{{url_for('newCatalog')}}" method='POST'>
+        <p>Name:</p>
+        <input type = 'text' size='30' name = 'name'>
+        <p>Image Link:</p>
+        <input type = 'text' size='30' name = 'image'>
+        <p>Tagline:</p>
+        <input type = 'text' size='30' name = 'tagline'>
+        <br>
+        <input type='submit' value='Create'>
+    </form>
+    <a href= "/admin">Cancel</a>
+</body>
+</html>

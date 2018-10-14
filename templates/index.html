@@ -9,7 +9,7 @@
 <body>
     <h1>Home page</h1>
     {% for i in catalogs %}
-        {{i.name}}
+        <a href="{{ url_for('categoryCatalog', catalog_id = i.id) }}">{{i.name}}</a>
     {% endfor %}
 </body>
 </html>

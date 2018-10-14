@@ -11,7 +11,7 @@ class Catalog(Base):
     __tablename__ = 'catalog'
     id = Column(Integer, primary_key = True)
     name = Column(String(80), nullable = False)
-    image = Column(String(250), nullable = False)
+    image = Column(String(250), nullable = True)
     tagline = Column(String(250))
     @property
     def serialize(self):
@@ -29,7 +29,7 @@ class Product(Base):
     name = Column(String(80), nullable = False)
     price = Column(String(80), nullable = False)
     image = Column(String(250), nullable = False)
-    description = Column(String(250), nullable = False)
+    description = Column(String(250), nullable = True)
     catalog = relationship(Catalog)
     catalog_id = Column(Integer, ForeignKey('catalog.id'))
     @property
@@ -40,7 +40,6 @@ class Product(Base):
             'price': self.price,
             'image': self.image,
             'description': self.description,
-            'catalog': self.catalog,
         }
 
 

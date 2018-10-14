@@ -8,5 +8,10 @@
 </head>
 <body>
     <h1>{{product.name}}</h1>
+    <button><a href="{{ url_for('categoryCatalog', catalog_id = catalog_id) }}">Back</a></button>
+    <div class="product">
+        <div class="image"><img src={{product.image}} alt="product image"></div>
+        <div class="price">{{product.price}}</div>
+    </div>
 </body>
 </html>

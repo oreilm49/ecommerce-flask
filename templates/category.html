@@ -4,10 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Ecommerce - {{category.name}}</title>
+    <title>Ecommerce - {{catalog.name}}</title>
 </head>
 <body>
-    <h1>{{category.name}}</h1>
-
+    <h1>{{catalog.name}}</h1>
+    <button><a href="/">Back</a></button>
+    {% for product in products %}
+    <div class="product">
+        <p class="model">{{product.name}}</p>
+        <div class="image"><img src={{product.image}} alt="product image"></div>
+        <div class="price">{{product.price}}</div>
+        <a href="{{ url_for('productPage',catalog_id=catalog.id,id=product.id) }}">View</a>
+    </div>
+    {% endfor %}
 </body>
 </html>
