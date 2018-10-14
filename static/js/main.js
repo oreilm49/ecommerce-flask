@@ -4,7 +4,6 @@ $(function(){
       })
 
         $('.openClose').click(function() {
-            console.log('clicked')
             var sidebarWidth = document.getElementById("admin-sidebar").offsetWidth;
             console.log(sidebarWidth);
             if (sidebarWidth == 0) {
