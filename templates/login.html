@@ -1,0 +1,24 @@
+{% extends 'base_client.html' %}
+
+{% block title %}Ecommerce App - Home{% endblock %}
+
+{% block navlinks %}
+    {% for c in catalogs %}
+    <a class="dropdown-item" href="{{ url_for('categoryCatalog',catalog_id=c.id) }}">{{c.name}}</a>
+    {% endfor %}
+{% endblock %}
+
+{% block content %}
+    <div id="signinButton">
+        <span class="g-signin"
+          data-scope="openid email"
+          data-clientid="335080544985-6a8tqn2au19qg6395svrm9pi96b4guk5.apps.googleusercontent.com"
+          data-redirecturi="postmessage"
+          data-accesstype="offline"
+          data-cookiepolicy="single_host_origin"
+          data-callback="signInCallback"
+          data-approvalprompt="force">
+        </span>
+    </div>
+    <div id="result"></div>
+{% endblock %}

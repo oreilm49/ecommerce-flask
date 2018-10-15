@@ -5,6 +5,10 @@
     padding-left: 5px;
 }
 
+.main-container {
+    margin-top: 50px;
+}
+
 a:link{
     text-decoration: none!important;
 }
