@@ -172,9 +172,8 @@ def categoryCatalog(catalog_id):
 @app.route('/catalog/<int:catalog_id>/product/<int:id>')
 def productPage(catalog_id, id):
     product = ProductModel().product(id)
-    catalog = CatalogModel().catalog(catalog_id)
     loggedin = checkLogin()
-    return render_template('product.html',catalogs=catalogs,product=product,catalog=catalog,loggedin=loggedin)
+    return render_template('product.html',catalogs=catalogs,product=product,catalog=product.catalog.name,loggedin=loggedin)
 
 # Products JSON
 @app.route('/catalog/<int:catalog_id>/products/JSON')

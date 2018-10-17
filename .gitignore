@@ -1,0 +1,5 @@
+# ignore all dbs
+*.db
+
+# ignore all compiled python
+*.pyc
