@@ -1,0 +1,15 @@
+Date: Wed, 17 Oct 2018 20:11:38 GMT
+Content-Type: text/plain
+Set-Cookie: __cfduid=dc028da6959e77a85e356808d4a9d58d51539807098; expires=Thu, 17-Oct-19 20:11:38 GMT; path=/; domain=.appliancesdelivered.ie; HttpOnly
+Last-Modified: Thu, 09 Jun 2016 09:33:47 GMT
+Vary: Accept-Encoding
+Content-Encoding: gzip
+X-Varnish: 577004142
+Via: 1.1 varnish
+Cf-Cache-Status: REVALIDATED
+Expires: Wed, 17 Oct 2018 20:26:38 GMT
+Cache-Control: public, max-age=900
+Accept-Ranges: bytes
+Expect-Ct: max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
+Server: cloudflare
+Cf-Ray: 46b56a5b08b9a6b9-DUB

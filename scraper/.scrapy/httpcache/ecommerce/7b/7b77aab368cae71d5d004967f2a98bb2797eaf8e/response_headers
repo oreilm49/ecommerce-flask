@@ -1,0 +1,15 @@
+Date: Wed, 17 Oct 2018 20:12:00 GMT
+Content-Type: text/html; charset=UTF-8
+Vary: Accept-Encoding
+Cache-Control: no-store, must-revalidate, max-age=0, no-cache
+Pragma: no-cache
+Expires: Sat, 26 Jul 1997 05:00:00 GMT
+Set-Cookie: XSRF-TOKEN=eyJpdiI6InNYYkE3ZEYyWFwveVZ2SWdXTis1cmZBPT0iLCJ2YWx1ZSI6IlRPTHBGZTFYb3J4QSszcVpMenZxUlFiV04wUnZiXC9IcTNsUDhIMEZZdnBjRlAxMW83NmVLR1JUR09XbDl2YkJOREZKaUhrSHFkWEV0MEtHYTZFYWtudz09IiwibWFjIjoiYTU5MjdlZTA3NjMwMGUxOWQwODk4N2U2M2YzMTk5ZGQ0NWUzMTljNmFmOWEwNzZjNzlmZTNlYTc4MWUyODljMCJ9; expires=Wed, 17-Oct-2018 22:12:00 GMT; Max-Age=7200; path=/
+Set-Cookie: buyandsell=eyJpdiI6Im5vN1J4bVwvVStVb1NjaHlGV3E1aWdRPT0iLCJ2YWx1ZSI6IkhSYWJFc1l2Vng4TFFcLzdnbUxHWjUrejhFM0lVUlc1U1wvc25ma096aU1hRGhweDVYNmxUNk1EVUM3ZzBRd3NzSEltU1o3RVdMc1pWM2pSZ2E4MkxVNHc9PSIsIm1hYyI6IjliMGQ3MTA4YjJjNjczNzMzODJmMzE5ZWNjY2RlMWVhN2Y3YzU2Njk3YjFjZGE4M2Y2ODdmNThmZjBiOWM1ZjgifQ%3D%3D; expires=Wed, 17-Oct-2018 22:12:00 GMT; Max-Age=7200; path=/; httponly
+X-Varnish: 1076340157
+Age: 0
+Via: 1.1 varnish
+Expect-Ct: max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"
+Server: cloudflare
+Cf-Ray: 46b56ae27a18a6ad-DUB
+Content-Encoding: gzip
