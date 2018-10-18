@@ -12,6 +12,7 @@ class Product(scrapy.Item):
         images = scrapy.Field()
         header = scrapy.Field()
         model = scrapy.Field()
+        price = scrapy.Field()
         global_category = scrapy.Field()
         category = scrapy.Field()
         brand = scrapy.Field()

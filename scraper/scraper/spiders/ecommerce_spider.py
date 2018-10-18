@@ -40,6 +40,7 @@ class ecommSpider(scrapy.Spider):
         item['images'] = response.css("#product-gallery ol li img::attr(src)").extract()
         item['header'] = response.css("#product-title::text").extract()[0]
         item['model'] = response.css("#product-title::text").extract()[0].split(" ")[-1]
+        item['price'] = response.css("#sticky-point p.price::text").extract_first()
         item['global_category'] = response.css("ul.breadcrumb li a::text").extract_first()
         item['category'] = response.css("ul.breadcrumb li a::text").extract()[1]
         item['brand'] = response.css("img.article-brand::attr(alt)").extract()[0]
