@@ -13,6 +13,7 @@ class Global_catalog(Base):
     name = Column(String(80), nullable = False)
     image = Column(String(250), nullable = True)
     tagline = Column(String(250))
+    catalogs = relationship("Catalog")
     @property
     def serialize(self):
         return {
@@ -28,8 +29,8 @@ class Catalog(Base):
     name = Column(String(80), nullable = False)
     image = Column(String(250), nullable = True)
     tagline = Column(String(250))
-    global_catalog = relationship(Global_catalog)
     global_catalog_id = Column(Integer, ForeignKey('global.id'))
+    products = relationship("Product")
     @property
     def serialize(self):
         return {
@@ -37,7 +38,7 @@ class Catalog(Base):
             'name': self.name,
             'image': self.image,
             'tagline': self.tagline,
-            'global_catalog': self.globalCatalog_id
+            'global_catalog': self.global_catalog_id
         }
 
 
@@ -48,12 +49,9 @@ class Product(Base):
     header = Column(String(250), nullable = False)
     model = Column(String(250), nullable = False)
     price = Column(String(80), nullable = False)
-    global_catalog = relationship(Global_catalog)
-    global_catalog_id = Column(Integer, ForeignKey('global.id'))
     brand = Column(String(250), nullable = False)
     description = Column(String(250), nullable = True)
     specs = Column(sqlalchemy_jsonfield.JSONField(), nullable = False)
-    catalog = relationship(Catalog)
     catalog_id = Column(Integer, ForeignKey('catalog.id'))
     @property
     def serialize(self):
@@ -63,11 +61,10 @@ class Product(Base):
             'header': self.header,
             'model': self.model,
             'price': self.price,
-            'global_catalog': self.global_catalog,
             'brand': self.brand,
             'description': self.description,
             'specs': self.specs,
-            'catalog': self.catalog
+            'catalog': self.catalog_id
         }
 
 class User(Base):

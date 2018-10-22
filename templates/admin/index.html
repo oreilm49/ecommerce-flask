@@ -3,25 +3,41 @@
 {% block title %}Admin Dashboard{% endblock %}
 
 {% block content %}
-<h1>Ecommerce App Admin Site</h1>
 <div class="catalogs">
     <h3>Product Catalogs</h3>
-    <p>Catalogs are used to group products together.
-    This facilitates a simple navigation experience for the user on the client website.</p>
+    <p>Catalogs are used to group products together. This facilitates a simple navigation experience for the user on
+        the client website.
+        <br>
+        Related catalogs are grouped into Global catalogs which are used as navlinks on the client website.
+        <br>
+        Global catalogs are created through bulk product data uploads, and can't be created through this admin portal.</p>
 
-    <div class="catalog-grid">
-        {% for i in catalogs %}
-        <div class="catalog-item">
-            <a href="{{ url_for('adminProducts',catalog_id=i.id) }}"><i class="fas fa-folder"></i></a>
-            <div class="catalog-name">{{i.name}}</div>
-            <a href="{{ url_for('adminCatalog',catalog_id=i.id) }}">Edit</a>
-            <a href="{{ url_for('deleteCatalog',catalog_id=i.id) }}">Delete</a>
-            <a href="{{ url_for('adminProducts',catalog_id=i.id) }}">Products</a>
+    <div class="accordion" id="catalog_accordion">
+        {% for g in catalogs %}
+        <div class="card">
+            <div id=global-{{loop.index}}>
+                <h5 class="mb-0">
+                    <button class="btn accordion_btn btn-link" type="button" data-toggle="collapse" data-target=collapse-{{loop.index}}
+                        aria-expanded="true" aria-controls=collapse-{{loop.index}}>
+                        {{g.global}}
+                    </button>
+                </h5>
+            </div>
+            <div id=collapse-{{loop.index}} class="collapse" aria-labelledby=global-{{loop.index}} data-parent="catalog_accordion">
+                <div class="card-body">
+                    {% for i in g.catalogs %}
+                    <div class="col-xs-1">
+                        <div>{{i.name}}</div>
+                        <a href="{{ url_for('adminCatalog',catalog_id=i.id) }}">Edit</a>
+                        <a href="{{ url_for('deleteCatalog',catalog_id=i.id) }}">Delete</a>
+                        <a href="{{ url_for('adminProducts',catalog_id=i.id) }}">Products</a>
+                    </div>
+                    {% endfor %}
+                    <button class="btn"><a href="{{ url_for('newCatalog',global_id=g.id) }}">New Catalog</a></button>
+                </div>
+            </div>
         </div>
         {% endfor %}
     </div>
 </div>
-<br>
-<p>Create a new catalog:</p>
-<a href="/admin/catalog/new"><i class="fas fa-folder-plus success"></i></a>
 {% endblock %}

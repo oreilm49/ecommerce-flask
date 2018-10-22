@@ -3,10 +3,10 @@
 {% block title %}Admin - New Catalog{% endblock %}
 
 {% block content %}
-    <h1>Create a new product</h1>
+    <h4>New {{global_catalog.name}} catalog</h4>
     <a href="/admin"><button class="btn btn-outline-secondary">back</button></a>
 
-    <form action= "{{url_for('newCatalog')}}" method='POST'>
+    <form action= "{{url_for('newCatalog',global_id=global_catalog.id)}}" method='POST'>
         <div class="form-group">
             <label for="catalogNameInput">Name:</label>
             <input id="catalogNameInput" class="form-control" type = 'text' size='30' name = 'name'>
@@ -21,6 +21,7 @@
             <label for="catalogTaglineInput">Tagline:</label>
             <input id="catalogTaglineInput" class="form-control"  type = 'text' size='30' name = 'tagline' >
         </div>
+        <input type="hidden" class="hidden" name="global_catalog_id" value={{global_catalog.id}}>
 
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>

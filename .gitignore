@@ -3,3 +3,7 @@
 
 # ignore all compiled python
 *.pyc
+
+products.json
+
+scraper/.scrapy/httpcache

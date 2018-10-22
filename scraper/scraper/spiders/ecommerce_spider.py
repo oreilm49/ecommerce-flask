@@ -37,7 +37,7 @@ class ecommSpider(scrapy.Spider):
 
     def parseProduct(self, response):
         item = Product()
-        item['images'] = response.css("#product-gallery ol li img::attr(src)").extract()
+        item['images'] = response.css("img.zoom-image::attr(src)").extract()
         item['header'] = response.css("#product-title::text").extract()[0]
         item['model'] = response.css("#product-title::text").extract()[0].split(" ")[-1]
         item['price'] = response.css("#sticky-point p.price::text").extract_first()

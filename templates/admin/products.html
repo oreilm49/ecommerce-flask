@@ -3,10 +3,13 @@
 {% block title %}Admin Dashboard{% endblock %}
 
 {% block content %}
-<h1>Product list: {{catalog.name}}</h1>
-<div class="button-group">
-        <a href="/admin"><button class="btn btn-outline-secondary">back</button></a>
-        <a href="{{ url_for('newProduct', catalog_id = catalog.id) }}"><button class="btn btn-outline-primary">New Product</button></a>
+
+<div class="product-header">
+    <div class="page-nav">
+        <a href="/admin">Home</a>&nbsp;>&nbsp;<span>Product list: {{catalog.name}}</span>
+    </div>
+    <h3>Product list: {{catalog.name}}</h3>
+    <a href="{{ url_for('newProduct', catalog_id = catalog.id) }}"><button class="btn btn-outline-primary">New Product</button></a>
 </div>
 
 <table class="table">
@@ -21,16 +24,16 @@
     </thead>
     <tbody>
         {% for p in products%}
-            <tr>
-                <th scope="row">{{p.id}}</th>
-                <td>{{p.name}}</td>
-                <td>{{p.price}}</td>
-                <td>{{p.description}}</td>
-                <td>
-                    <a href="{{ url_for('productView',catalog_id=catalog.id, product_id=p.id) }}">Edit</a>
-                    <a href="{{ url_for('deleteProduct',catalog_id=catalog.id, product_id=p.id) }}">Delete</a>
-                </td>
-            </tr>
+        <tr>
+            <th scope="row">{{p.id}}</th>
+            <td>{{p.model}}</td>
+            <td>{{p.price}}</td>
+            <td>{{p.header}}</td>
+            <td>
+                <a href="{{ url_for('productView',catalog_id=catalog.id, product_id=p.id) }}">Edit</a>
+                <a href="{{ url_for('deleteProduct',catalog_id=catalog.id, product_id=p.id) }}">Delete</a>
+            </td>
+        </tr>
         {% endfor %}
     </tbody>
 </table>

@@ -1,0 +1,15 @@
+{% extends 'base_admin.html' %}
+
+{% block title %}Admin - User Details{% endblock %}
+
+{% block content %}
+<div class="product-header">
+    <div class="page-nav">
+        <a href="/admin">Home</a>&nbsp;>&nbsp;<span>Account</span>
+    </div>
+    <h3>User details</h3>
+</div>
+
+{{user}}
+
+{% endblock %}

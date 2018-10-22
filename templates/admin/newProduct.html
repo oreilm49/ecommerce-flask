@@ -3,28 +3,50 @@
 {% block title %}Admin - New Product{% endblock %}
 
 {% block content %}
-    <h1>Create a new product</h1>
-    <a href="{{ url_for('adminProducts',catalog_id=catalog_id) }}"><button class="btn btn-outline-secondary">back</button></a>
-    <form action= "{{url_for('newProduct', catalog_id = catalog_id)}}" method='POST'>
-        <div class="form-group">
-            <label for="productNameInput">Name:</label>
-            <input id="productNameInput" class="form-control" type = 'text' size='30' name = 'name'>
-        </div>
+<div class="product-header">
+    <div class="page-nav">
+        <a href="/admin">Home</a>&nbsp;>&nbsp;<a href="{{ url_for('adminProducts', catalog_id=catalog.id) }}">{{catalog.name}}</a>&nbsp;>&nbsp;<span>New Product</span>
+    </div>
+    <h3>Create a new product</h3>
+</div>
 
-        <div class="form-group">
-            <label for="productImageInput">Image Link:</label>
-            <input id="productImageInput" class="form-control" type = 'text' size='30' name = 'image'>
-        </div>
+<form action="{{url_for('newProduct', catalog_id = catalog.id)}}" method='POST'>
+    <div class="form-group">
+        <label for="productModelInput">Model:</label>
+        <input id="productModelInput" class="form-control" type='text' size='30' name='model'>
+    </div>
 
-        <div class="form-group">
-            <label for="productDescriptionInput">Description:</label>
-            <input id="productDescriptionInput" class="form-control"  type = 'text' size='30' name = 'description' >
-        </div>
+    <div class="form-group">
+        <label for="productImageInput">Images:</label>
+        <input id="productImageInput" class="form-control" type='text' size='30' name='images'>
+        <small>If entering multiple image links, separate them with a comma: ","</small>
+    </div>
 
-        <div class="form-group">
-            <label for="productPriceInput">Price:</label>
-            <input id="productPriceInput" class="form-control" type = 'text' size='30' name = 'price' >
-        </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
+    <div class="form-group">
+        <label for="productHeaderInput">Header:</label>
+        <input id="productHeaderInput" class="form-control" type='text' size='30' name='header'>
+    </div>
+
+    <div class="form-group">
+        <label for="productPriceInput">Price:</label>
+        <input id="productPriceInput" class="form-control" type='text' size='30' name='price'>
+    </div>
+
+    <div class="form-group">
+        <label for="productBrandInput">Brand:</label>
+        <input id="productBrandInput" class="form-control" type='text' size='30' name='brand'>
+    </div>
+
+    <div class="form-group">
+        <label for="productDescriptionInput">Description:</label>
+        <input id="productDescriptionInput" class="form-control" type='text' size='30' name='description'>
+    </div>
+
+    <div class="form-group">
+        <label for="productSpecsInput">Specs:</label>
+        <input id="productSpecsInput" class="form-control" type='text' size='30' name='specs' value="{'key':'value','key':'value'}">
+        <small>Enter each spec in key value pairs separated by commas and inside the curly braces.</small>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
 {% endblock %}

@@ -3,30 +3,50 @@
 {% block title %}Admin {{catalog.name}}, Product: {{product.name}}{% endblock %}
 
 {% block content %}
-<h1>Edit Product Page: {{product.name}}</h1>
-<a href="{{ url_for('adminProducts',catalog_id=catalog.id) }}"><button class="btn btn-outline-secondary">back</button></a>
-<form action= "{{url_for('productView', catalog_id = catalog.id, product_id = product.id)}}" method='POST'>
-        <div class="form-group">
-            <label for="productNameInput">Name:</label>
-            <input id="productNameInput" class="form-control" type = 'text' size='30' name = 'name' placeholder = '{{product.name}}'>
-        </div>
+<div class="product-header">
+    <div class="page-nav">
+        <a href="/admin">Home</a>&nbsp;>&nbsp;<a href="{{ url_for('adminProducts', catalog_id=catalog.id) }}">{{catalog.name}}</a>&nbsp;>&nbsp;<span>{{product.model}}</span>
+    </div>
+    <h3>Edit Product: {{product.model}}</h3>
+</div>
 
-        <div class="form-group">
-            <label for="productImageInput">Image Link:</label>
-            <input id="productImageInput" class="form-control" type = 'text' size='30' name = 'image' placeholder = '{{product.image}}'>
-        </div>
+<form action="{{url_for('productView', catalog_id = catalog.id, product_id = product.id)}}" method='POST'>
+    <div class="form-group">
+        <label for="productModelInput">Model:</label>
+        <input id="productModelInput" class="form-control" type='text' size='30' name='model' placeholder='{{product.model}}'>
+    </div>
 
-        <div class="form-group">
-            <label for="productDescriptionInput">Description:</label>
-            <input  id="productDescriptionInput" class="form-control" type = 'text' size='30' name = 'description' placeholder = '{{product.description}}'>
-        </div>
+    <div class="form-group">
+        <label for="productImageInput">Image Link:</label>
+        <input id="productImageInput" class="form-control" type='text' size='30' name='images' placeholder='{{product.images}}'>
+    </div>
 
-        <div class="form-group">
-            <label for="productPriceInput">Price:</label>
-            <input id="productPriceInput" class="form-control" type = 'text' size='30' name = 'price' placeholder = '{{product.price}}'>
-        </div>
-        <input type="hidden" name="id" value="{{product.id}}"/>
-        <br>
-        <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
+    <div class="form-group">
+        <label for="productHeaderInput">Header:</label>
+        <input id="productHeaderInput" class="form-control" type='text' size='30' name='header' placeholder='{{product.header}}'>
+    </div>
+
+    <div class="form-group">
+        <label for="productPriceInput">Price:</label>
+        <input id="productPriceInput" class="form-control" type='text' size='30' name='price' placeholder='{{product.price}}'>
+    </div>
+
+    <div class="form-group">
+        <label for="productBrandInput">Brand:</label>
+        <input id="productBrandInput" class="form-control" type='text' size='30' name='brand' placeholder='{{product.brand}}'>
+    </div>
+
+    <div class="form-group">
+        <label for="productDescriptionInput">Description:</label>
+        <input id="productDescriptionInput" class="form-control" type='text' size='30' name='description' placeholder='{{product.description}}'>
+    </div>
+
+    <div class="form-group">
+        <label for="productSpecsInput">Specs:</label>
+        <input id="productSpecsInput" class="form-control" type='text' size='30' name='specs' placeholder='{{product.specs}}'>
+    </div>
+    <input type="hidden" name="id" value="{{product.id}}" />
+    <br>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
 {% endblock %}

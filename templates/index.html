@@ -2,34 +2,35 @@
 
 {% block title %}Ecommerce App - Home{% endblock %}
 
-{% block navlinks %}
-    {% for c in catalogs %}
-    <a class="dropdown-item" href="{{ url_for('categoryCatalog',catalog_id=c.id) }}">{{c.name}}</a>
-    {% endfor %}
-{% endblock %}
-
 {% block content %}
     <div class="carousel slide">
         <div class="carousel-inner">
-            {% for c in catalogs %}
+            {% for s in slider %}
                 <div class="carousel-item {% if loop.index == 1 %} active{% endif %}">
-                    <img class="d-block w-100" src="{{c.image}}" alt="{{c.name}}">
+                    <img class="d-block w-100" src="{{s.image}}" alt="{{s.name}}">
+                    <div class="carousel-caption">
+                        <h4>{{s.tagline}}</h4>
+                        <br>
+                        <a href="{{ url_for('categoryCatalog',catalog_id=s.id) }}" class="btn btn-primary btn-lg" role="button">View Products</a>
+                    </div>
                 </div>
             {% endfor %}
         </div>
     </div>
-    <div class="featured-products">
-        <h3>Featured Products</h3>
+
+        <h3 class="catalog-header">Featured Products</h3>
         <div class="products">
                 {% for p in products[:12] %}
                 <div class="card">
-                    <img class="card-img-top" src="{{p.image}}" alt="Card image cap">
-                    <div class="card-body">
-                        <h5 class="card-title">{{p.name}}</h5>
-                        <a href="{{ url_for('productPage',catalog_id=1,id=p.id) }}" class="btn btn-primary">View</a>
+                        <img class="card-img-top" src="{{p.images[0]}}" alt="Card image cap">
+                        <div class="card-body">
+                            <h5  class="card-title">{{p.brand}}</h5>
+                            <p>{{p.header}}</p>
+                            <h6>{{p.price}}</h6>
+                            <a href="{{ url_for('productPage',catalog_id=1,id=p.id) }}" class="btn btn-primary">View</a>
+                        </div>
                     </div>
-                </div>
                 {% endfor %}
         </div>
-    </div>
+
 {% endblock %}

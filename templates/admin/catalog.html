@@ -3,24 +3,29 @@
 {% block title %}Admin - {{catalog.name}}{% endblock %}
 
 {% block content %}
-<h1>Edit Catalog: {{catalog.name}}</h1>
+<div class="product-header">
+    <div class="page-nav">
+        <a href="/admin">Home</a>&nbsp;>&nbsp;<span>Edit {{catalog.name}}</span>
+    </div>
+    <h3>Edit Catalog: {{catalog.name}}</h3>
+</div>
 
-<form action= "{{url_for('adminCatalog', catalog_id = catalog.id)}}" method='POST'>
+<form action="{{url_for('adminCatalog', catalog_id = catalog.id)}}" method='POST'>
     <div class="form-group">
         <label for="catalogNameInput">Name:</label>
-        <input id="catalogNameInput" class="form-control" type = 'text' size='30' name = 'name' placeholder = '{{catalog.name}}'>
+        <input id="catalogNameInput" class="form-control" type='text' size='30' name='name' placeholder='{{catalog.name}}'>
     </div>
 
     <div class="form-group">
         <label for="catalogImageInput">Image Link:</label>
-        <input id="catalogImageInput" class="form-control" type = 'text' size='30' name = 'image' placeholder = '{{catalog.image}}'>
+        <input id="catalogImageInput" class="form-control" type='text' size='30' name='image' placeholder='{{catalog.image}}'>
     </div>
 
     <div class="form-group">
-        <label for="catalogTaglineInput">Image Link:</label>
-        <input id="catalogTaglineInput" class="form-control" type = 'text' size='30' name = 'tagline' placeholder = '{{catalog.tagline}}'>
+        <label for="catalogTaglineInput">Tagline:</label>
+        <input id="catalogTaglineInput" class="form-control" type='text' size='30' name='tagline' placeholder='{{catalog.tagline}}'>
     </div>
-    <input type="hidden" name="id" value="{{catalog.id}}"/>
+    <input type="hidden" name="id" value="{{catalog.id}}" />
     <br>
     <button type="submit" class="btn btn-primary">Submit</button>
 </form>

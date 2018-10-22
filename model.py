@@ -1,6 +1,6 @@
 from sqlalchemy import create_engine, exc
 from sqlalchemy.orm import sessionmaker
-from database import Catalog, Product, Base
+from database import Catalog, Product, Base, Global_catalog
 
 
 engine = create_engine('sqlite:///ecommerceapp.db')
@@ -12,17 +12,18 @@ class ProductModel():
     def createProduct(self, product):
         DBSession = sessionmaker(bind=engine)
         session = DBSession()
-        name = product['name']
-        price = product['price']
-        image = product['image']
-        description = product['description']
         catalog = session.query(Catalog).filter_by(id=product['catalog_id']).one()
+        global_catalog = session.query(Global_catalog).filter_by(name=product['global_category_id']).one()
         newProduct = Product(
-            name=name,
-            price=price,
-            image=image,
-            description=description,
-            catalog=catalog)
+                    images = products['images'],
+                    header = product['header'],
+                    model = product['model'],
+                    price = product['price'],
+                    global_catalog = global_catalog,
+                    brand = product['brand'],
+                    description = product['description'],
+                    specs = product['specs'],
+                    catalog = catalog)
         try:
             session.add(newProduct)
             session.commit()
@@ -34,26 +35,36 @@ class ProductModel():
         DBSession = sessionmaker(bind=engine)
         session = DBSession()
         products = session.query(Product).filter_by(catalog_id=category).all()
+        for p in products:
+            p.images = p.images.split(",")
         return products
 
     def product(self,id):
         DBSession = sessionmaker(bind=engine)
         session = DBSession()
         product = session.query(Product).filter_by(id=id).one()
+        product.images = product.images.split(",")
         return product
 
     def updateProduct(self,product):
         DBSession = sessionmaker(bind=engine)
         session = DBSession()
+        print(product)
         dbproduct = session.query(Product).filter_by(id=product['id']).one()
-        if product['name']:
-            dbproduct.name = product['name']
+        if product['model']:
+            dbproduct.model = product['model']
+        elif product['images']:
+            dbproduct.images = product['images']
+        elif product['header']:
+            dbproduct.header = product['header']
         elif product['price']:
             dbproduct.price = product['price']
-        elif product['image']:
-            dbproduct.image = product['image']
+        elif product['brand']:
+            dbproduct.brand = product['brand']
         elif product['description']:
             dbproduct.description = product['description']
+        elif product['specs']:
+            dbproduct.specs = product['specs']
         try:
             session.add(dbproduct)
             session.commit()
@@ -79,10 +90,13 @@ class CatalogModel():
         name = catalog['name']
         image = catalog['image']
         tagline = catalog['tagline']
+        global_catalog_id = catalog['global_catalog_id']
         newCatalog = Catalog(
             name=name,
             image=image,
-            tagline=tagline)
+            tagline=tagline,
+            global_catalog_id=global_catalog_id
+            )
         try:
             session.add(newCatalog)
             session.commit()
@@ -90,11 +104,15 @@ class CatalogModel():
         except exc.SQLAlchemyError:
             return "Catalog not created"
 
-    def catalogs(self):
+    def catalogs(self, id):
         DBSession = sessionmaker(bind=engine)
         session = DBSession()
-        catalogs = session.query(Catalog).all()
-        return catalogs
+        return session.query(Catalog).filter_by(global_catalog_id=id).all()
+
+    def allCatalogs(self):
+        DBSession = sessionmaker(bind=engine)
+        session = DBSession()
+        return session.query(Catalog)
 
     def catalog(self, id):
         DBSession = sessionmaker(bind=engine)
@@ -111,9 +129,9 @@ class CatalogModel():
         dbcatalog = session.query(Catalog).filter_by(id=catalog['id']).one()
         if catalog['name']:
             dbcatalog.name = catalog['name']
-        elif catalog['tagline']:
+        if catalog['tagline']:
             dbcatalog.tagline = catalog['tagline']
-        elif catalog['image']:
+        if catalog['image']:
             dbcatalog.image = catalog['image']
         else:
             pass
@@ -135,6 +153,70 @@ class CatalogModel():
         except:
             return "SQL Error: catalog with id of %s not deleted"
 
+# CRUD Catalog
+class GlobalCatalogModel():
+    def createGlobal(self, catalog):
+        DBSession = sessionmaker(bind=engine)
+        session = DBSession()
+        name = catalog['name']
+        image = catalog['image']
+        tagline = catalog['tagline']
+        newCatalog = Global_catalog(
+            name=name,
+            image=image,
+            tagline=tagline)
+        try:
+            session.add(newCatalog)
+            session.commit()
+            return "New Global_catalog created"
+        except exc.SQLAlchemyError:
+            return "Global_catalog not created"
+
+    def global_catalogs(self):
+        DBSession = sessionmaker(bind=engine)
+        session = DBSession()
+        catalogs = session.query(Global_catalog).all()
+        return catalogs
+
+    def global_catalog(self, id):
+        DBSession = sessionmaker(bind=engine)
+        session = DBSession()
+        try:
+            catalog = session.query(Global_catalog).filter_by(id=id).one()
+            return catalog
+        except:
+            return "Global_catalog with id %s not found" % id
+
+    def updateGlobalCatalog(self, catalog):
+        DBSession = sessionmaker(bind=engine)
+        session = DBSession()
+        dbcatalog = session.query(Global_catalog).filter_by(id=catalog['id']).one()
+        if catalog['name']:
+            dbcatalog.name = catalog['name']
+        elif catalog['tagline']:
+            dbcatalog.tagline = catalog['tagline']
+        elif catalog['image']:
+            dbcatalog.image = catalog['image']
+        else:
+            pass
+        try:
+            session.add(dbcatalog)
+            session.commit()
+            return "Global_catalog with id %s updated" % id
+        except exc.SQLAlchemyError:
+            return "Global_catalog with id %s not updated" % id
+
+
+    def deleteGlobalCatalog(self, id):
+        DBSession = sessionmaker(bind=engine)
+        session = DBSession()
+        try:
+            session.query(Global_catalog).filter_by(id=id).delete()
+            session.commit()
+            return "Global_catalog with id of %s deleted" % id
+        except:
+            return "SQL Error: Global_catalog with id of %s not deleted"
+
 
 # CRUD User
 class UserModel():
@@ -152,3 +234,30 @@ class UserModel():
 
     def deleteUser(self,id):
         return "User deleted"
+
+
+class Workers():
+    def getNavLinks(self):
+        navlinks = []
+        for item in GlobalCatalogModel().global_catalogs():
+            output = {}
+            output['global'] = item.name
+            output['id'] = item.id
+            output['catalogs'] = CatalogModel().catalogs(item.id)
+            navlinks.append(output)
+        return navlinks
+
+    def getSlider(self):
+        slider = []
+        for item in CatalogModel().allCatalogs():
+            if item.image:
+                slider.append(item)
+        return slider
+
+    def catalogsJSON(self):
+        json = []
+        for item in GlobalCatalogModel().global_catalogs():
+            catalogs = CatalogModel().catalogs(item.id)
+            for c in catalogs:
+                json.append(c.serialize)
+        return json

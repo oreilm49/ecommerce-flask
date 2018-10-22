@@ -2,26 +2,26 @@
 
 {% block title %}Ecommerce {{catalog.name}}{% endblock %}
 
-{% block navlinks %}
-    {% for c in catalogs %}
-    <a class="dropdown-item" href="{{ url_for('categoryCatalog',catalog_id=c.id) }}">{{c.name}}</a>
-    {% endfor %}
-{% endblock %}
-
 {% block content %}
-    <div class="featured-products">
-        <h3>{{catalog.name}}: Products</h3>
-        <div class="products">
-                {% for p in products %}
-                <div class="card">
-                    <img class="card-img-top" src="{{p.image}}" alt="{{p.image}}">
-                    <div class="card-body">
-                        <h5 class="card-title">{{p.name}}</h5>
-                        <p class="card-text">€ {{p.price}}</p>
-                        <a href="{{ url_for('productPage',catalog_id=1,id=p.id) }}" class="btn btn-primary">View</a>
-                    </div>
-                </div>
-                {% endfor %}
+
+<div class="page-nav">
+    <a href="/">Home</a>&nbsp;>&nbsp;{{catalog.name}}
+</div>
+<h3 class="catalog-header">{{catalog.name}}: Products</h3>
+<div class="products">
+    {% for p in products %}
+    <div class="card">
+        <div class="card-image-div">
+            <img class="card-img-top" src="{{p.images[0]}}" alt="Card image cap">
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">{{p.brand}}</h5>
+            <p>{{p.header}}</p>
+            <h6>{{p.price}}</h6>
+            <a href="{{ url_for('productPage',catalog_id=catalog.id,id=p.id) }}" class="btn btn-primary">View</a>
         </div>
     </div>
+    {% endfor %}
+
+</div>
 {% endblock %}

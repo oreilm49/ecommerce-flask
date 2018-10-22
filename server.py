@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, url_for, redirect, flash, jsonify, make_response
-from model import ProductModel, CatalogModel, UserModel
+from model import ProductModel, CatalogModel, UserModel, GlobalCatalogModel, Workers
 from sqlalchemy import create_engine, exc
 from sqlalchemy.orm import sessionmaker
 from database import Catalog, Product, Base
@@ -15,23 +15,28 @@ import requests
 
 app = Flask(__name__)
 
+
+# Login Flow
 def checkLogin():
     if 'username' not in login_session:
         return False
     else:
         return True
 
-# Login Flow
+
 @app.route('/login')
 def showLogin():
     state = ''.join(
         random.choice(string.ascii_uppercase + string.digits) for x in range(32))
     login_session['state'] = state
+    links = Workers().getNavLinks()
     # return "The current session state is %s" % login_session['state']
-    return render_template('login.html', STATE=state)
+    return render_template('login.html',navlinks=links, STATE=state)
+
 
 CLIENT_ID = json.loads(
     open('client_secrets.json','r').read())['web']['client_id']
+
 
 @app.route('/gconnect', methods=['POST'])
 def gconnect():
@@ -150,15 +155,15 @@ def gdisconnect():
         return response
 
 
-# Defined once, used in each client template for nav links
-catalogs = CatalogModel().catalogs()
-
 # Home route
 @app.route('/')
 def index():
     products = ProductModel().products(1)
     loggedin = checkLogin()
-    return render_template('index.html',catalogs=catalogs,products=products,loggedin=loggedin)
+    links = Workers().getNavLinks()
+    slider = Workers().getSlider()
+    return render_template('index.html',navlinks=links,products=products,loggedin=loggedin,slider=slider)
+
 
 # Category page
 @app.route('/catalog/<int:catalog_id>/products')
@@ -166,14 +171,19 @@ def categoryCatalog(catalog_id):
     products = ProductModel().products(catalog_id)
     catalog = CatalogModel().catalog(catalog_id)
     loggedin = checkLogin()
-    return render_template('category.html',catalogs=catalogs,catalog=catalog,products=products,loggedin=loggedin)
+    links = Workers().getNavLinks()
+    return render_template('category.html',navlinks=links,catalog=catalog,products=products,loggedin=loggedin)
+
 
 # Product page
 @app.route('/catalog/<int:catalog_id>/product/<int:id>')
 def productPage(catalog_id, id):
     product = ProductModel().product(id)
+    catalog = CatalogModel().catalog(catalog_id)
     loggedin = checkLogin()
-    return render_template('product.html',catalogs=catalogs,product=product,catalog=product.catalog.name,loggedin=loggedin)
+    links = Workers().getNavLinks()
+    return render_template('product.html',navlinks=links,product=product,catalog=catalog,loggedin=loggedin)
+
 
 # Products JSON
 @app.route('/catalog/<int:catalog_id>/products/JSON')
@@ -181,13 +191,29 @@ def categoryCatalogJSON(catalog_id):
     products = ProductModel().products(catalog_id)
     return jsonify(products=[i.serialize for i in products])
 
+
+# Product JSON
+@app.route('/product/<int:id>/JSON')
+def productJSON(id):
+    product = ProductModel().product(id)
+    return jsonify(product=[product.serialize])
+
+
+# Catalogs JSON
+@app.route('/catalogs/JSON')
+def catalogsJSON():
+    return jsonify(Workers().catalogsJSON())
+
+
 # Admin home route
 @app.route('/admin')
 def adminHome():
     if 'username' not in login_session:
         return redirect('/login')
-    catalogs = CatalogModel().catalogs()
+    catalogs = Workers().getNavLinks()
+    print(login_session)
     return render_template('admin/index.html',catalogs=catalogs)
+
 
 # Admin category edit route
 @app.route('/admin/catalog/<int:catalog_id>', methods=['GET','POST'])
@@ -202,6 +228,7 @@ def adminCatalog(catalog_id):
     else:
         return render_template('admin/catalog.html',catalog=catalog)
 
+
 # Admin category delete route
 @app.route('/admin/catalog/<int:catalog_id>/delete', methods=['GET','POST'])
 def deleteCatalog(catalog_id):
@@ -214,16 +241,18 @@ def deleteCatalog(catalog_id):
     else:
         return render_template('admin/deleteCatalog.html',catalog=catalog)
 
+
 # Admin new category route
-@app.route('/admin/catalog/new', methods=['GET','POST'])
-def newCatalog():
+@app.route('/admin/<global_id>/catalog/new', methods=['GET','POST'])
+def newCatalog(global_id):
     if 'username' not in login_session:
         return redirect('/login')
     if request.method == 'POST':
         CatalogModel().createCatalog(request.form)
         return redirect('/admin')
     else:
-        return render_template('admin/newCatalog.html')
+        global_catalog = GlobalCatalogModel().global_catalog(global_id)
+        return render_template('admin/newCatalog.html',global_catalog=global_catalog)
 
 
 # Admin category products view
@@ -234,6 +263,7 @@ def adminProducts(catalog_id):
     products = ProductModel().products(catalog_id)
     catalog = CatalogModel().catalog(catalog_id)
     return render_template('admin/products.html',catalog=catalog,products=products)
+
 
 # Admin products edit route
 @app.route('/admin/catalog/<int:catalog_id>/product/<int:product_id>', methods=['GET','POST'])
@@ -249,6 +279,7 @@ def productView(catalog_id, product_id):
         catalog = CatalogModel().catalog(catalog_id)
         return render_template('admin/product.html',product=product,catalog=catalog)
 
+
 # Admin product delete route
 @app.route('/admin/catalog/<int:catalog_id>/product/<int:product_id>/delete', methods=['GET','POST'])
 def deleteProduct(catalog_id, product_id):
@@ -263,6 +294,7 @@ def deleteProduct(catalog_id, product_id):
         catalog = CatalogModel().catalog(catalog_id)
         return render_template('admin/deleteProduct.html',catalog=catalog, product=product)
 
+
 # Admin new product route
 @app.route('/admin/catalog/<int:catalog_id>/product/new', methods=['GET','POST'])
 def newProduct(catalog_id):
@@ -272,7 +304,9 @@ def newProduct(catalog_id):
         ProductModel().createProduct(request.form)
         return redirect(url_for('adminProducts',catalog_id=catalog_id))
     else:
-        return render_template('admin/newProduct.html',catalog_id=catalog_id)
+        catalog = CatalogModel().catalog(catalog_id)
+        return render_template('admin/newProduct.html',catalog=catalog)
+
 
 # Admin user crud route
 @app.route('/admin/user/<int:user_id>', methods=['GET','PUT','POST','DELETE'])
@@ -288,7 +322,6 @@ def userView(user_id):
         UserModel().deleteUser(request.form['id'])
     else:
         return render_template('admin/user.html',user=user)
-
 
 
 if __name__ == '__main__':

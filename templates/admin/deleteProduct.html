@@ -3,10 +3,16 @@
 {% block title %}Admin - Delete Product{% endblock %}
 
 {% block content %}
-<h1>Delete {{product.name}}</h1>
-<a href="{{ url_for('adminProducts',catalog_id=catalog.id) }}"><button class="btn btn-outline-secondary">back</button></a>
-<form action= "{{url_for('deleteProduct', catalog_id = catalog.id, product_id = product.id)}}" method = 'POST'>
-    <p>Click below to delete:</p>
+<div class="product-header">
+    <div class="page-nav">
+        <a href="/admin">Home</a>&nbsp;>&nbsp;<a href="{{ url_for('adminProducts', catalog_id=catalog.id) }}">{{catalog.name}}</a>&nbsp;>&nbsp;<span>Delete
+            {{product.model}}</span>
+    </div>
+    <h3>Click below to delete {{product.model}}</h3>
+</div>
+
+<form action="{{url_for('deleteProduct', catalog_id = catalog.id, product_id = product.id)}}" method='POST'>
     <button type="submit" class="btn btn-danger">Delete</button>
 </form>
+
 {% endblock %}
