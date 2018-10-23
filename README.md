@@ -40,7 +40,10 @@ This project is part of the
     pip install requests
     pip install httplib2
     ~~~~
-
+6. Add the below port config to the Vagrantfile and save:
+    ~~~~
+    config.vm.network "forwarded_port", guest: 6500, host: 6500, host_ip: "127.0.0.1"
+    ~~~~
 <b>Run</b>
 1. Launch Vagrant by & log in by running
     ~~~~
