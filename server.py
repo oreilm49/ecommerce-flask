@@ -224,6 +224,7 @@ def adminCatalog(catalog_id):
     if request.method == 'POST':
         CatalogModel().updateCatalog(request.form)
         catalog = CatalogModel().catalog(catalog_id)
+        flash("Catalog edited sucessfully")
         return render_template('admin/catalog.html',catalog=catalog)
     else:
         return render_template('admin/catalog.html',catalog=catalog)
@@ -237,7 +238,9 @@ def deleteCatalog(catalog_id):
     catalog = CatalogModel().catalog(catalog_id)
     if request.method == 'POST':
         CatalogModel().deleteCatalog(catalog_id)
+        flash("Catalog deleted sucessfully")
         return redirect("/admin")
+
     else:
         return render_template('admin/deleteCatalog.html',catalog=catalog)
 
@@ -249,7 +252,8 @@ def newCatalog(global_id):
         return redirect('/login')
     if request.method == 'POST':
         CatalogModel().createCatalog(request.form)
-        return redirect('/admin')
+        flash("Catalog created sucessfully")
+        return redirect("/admin")
     else:
         global_catalog = GlobalCatalogModel().global_catalog(global_id)
         return render_template('admin/newCatalog.html',global_catalog=global_catalog)
@@ -273,6 +277,7 @@ def productView(catalog_id, product_id):
     catalog = CatalogModel().catalog(catalog_id)
     if request.method == 'POST':
         ProductModel().updateProduct(request.form)
+        flash("Product sucessfully edited")
         return redirect(url_for('adminProducts',catalog_id=catalog_id))
     else:
         product = ProductModel().product(product_id)
@@ -288,6 +293,7 @@ def deleteProduct(catalog_id, product_id):
     catalog = CatalogModel().catalog(catalog_id)
     if request.method == 'POST':
         ProductModel().deleteProduct(product_id)
+        flash("Product sucessfully deleted")
         return redirect(url_for('adminProducts',catalog_id=catalog_id))
     else:
         product = ProductModel().product(product_id)
@@ -302,6 +308,7 @@ def newProduct(catalog_id):
         return redirect('/login')
     if request.method == 'POST':
         ProductModel().createProduct(request.form)
+        flash("Product sucessfully created")
         return redirect(url_for('adminProducts',catalog_id=catalog_id))
     else:
         catalog = CatalogModel().catalog(catalog_id)

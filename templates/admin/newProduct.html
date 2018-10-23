@@ -13,40 +13,41 @@
 <form action="{{url_for('newProduct', catalog_id = catalog.id)}}" method='POST'>
     <div class="form-group">
         <label for="productModelInput">Model:</label>
-        <input id="productModelInput" class="form-control" type='text' size='30' name='model'>
+        <input id="productModelInput" class="form-control" type='text' size='30' name='model' required>
     </div>
 
     <div class="form-group">
         <label for="productImageInput">Images:</label>
-        <input id="productImageInput" class="form-control" type='text' size='30' name='images'>
+        <input id="productImageInput" class="form-control" type='text' size='30' name='images' required>
         <small>If entering multiple image links, separate them with a comma: ","</small>
     </div>
 
     <div class="form-group">
         <label for="productHeaderInput">Header:</label>
-        <input id="productHeaderInput" class="form-control" type='text' size='30' name='header'>
+        <input id="productHeaderInput" class="form-control" type='text' size='30' name='header' required>
     </div>
 
     <div class="form-group">
         <label for="productPriceInput">Price:</label>
-        <input id="productPriceInput" class="form-control" type='text' size='30' name='price'>
+        <input id="productPriceInput" class="form-control" type='text' size='30' name='price' required>
     </div>
 
     <div class="form-group">
         <label for="productBrandInput">Brand:</label>
-        <input id="productBrandInput" class="form-control" type='text' size='30' name='brand'>
+        <input id="productBrandInput" class="form-control" type='text' size='30' name='brand' required>
     </div>
 
     <div class="form-group">
         <label for="productDescriptionInput">Description:</label>
-        <input id="productDescriptionInput" class="form-control" type='text' size='30' name='description'>
+        <input id="productDescriptionInput" class="form-control" type='text' size='30' name='description' required>
     </div>
 
     <div class="form-group">
         <label for="productSpecsInput">Specs:</label>
-        <input id="productSpecsInput" class="form-control" type='text' size='30' name='specs' value="{'key':'value','key':'value'}">
+        <input id="productSpecsInput" class="form-control" type='text' size='30' name='specs' value="{'key':'value','key':'value'}" required>
         <small>Enter each spec in key value pairs separated by commas and inside the curly braces.</small>
     </div>
+    <input type="hidden" name="catalog_id" value={{catalog.id}}>
     <button type="submit" class="btn btn-primary">Submit</button>
 </form>
 {% endblock %}

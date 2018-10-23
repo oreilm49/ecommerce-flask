@@ -12,18 +12,17 @@ class ProductModel():
     def createProduct(self, product):
         DBSession = sessionmaker(bind=engine)
         session = DBSession()
+        print(product)
         catalog = session.query(Catalog).filter_by(id=product['catalog_id']).one()
-        global_catalog = session.query(Global_catalog).filter_by(name=product['global_category_id']).one()
         newProduct = Product(
-                    images = products['images'],
+                    images = product['images'],
                     header = product['header'],
                     model = product['model'],
                     price = product['price'],
-                    global_catalog = global_catalog,
                     brand = product['brand'],
                     description = product['description'],
                     specs = product['specs'],
-                    catalog = catalog)
+                    catalog_id = catalog.id)
         try:
             session.add(newProduct)
             session.commit()

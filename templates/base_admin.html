@@ -22,7 +22,10 @@
 
     <section class="content">
         {% for message in get_flashed_messages() %}
-            <div class="flash">{{ message }}</div>
+            <div class="alert alert-info">
+                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                <strong>{{ message }}</strong>
+              </div>
         {% endfor %}
 
         <div id="main">

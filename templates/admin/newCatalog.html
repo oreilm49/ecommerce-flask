@@ -3,26 +3,30 @@
 {% block title %}Admin - New Catalog{% endblock %}
 
 {% block content %}
-    <h4>New {{global_catalog.name}} catalog</h4>
-    <a href="/admin"><button class="btn btn-outline-secondary">back</button></a>
+<div class="product-header">
+    <div class="page-nav">
+        <a href="/admin">Home</a>&nbsp;>&nbsp;<span>New Catalog</span>
+    </div>
+    <h3>New {{global_catalog.name}} catalog</h3>
+</div>
 
-    <form action= "{{url_for('newCatalog',global_id=global_catalog.id)}}" method='POST'>
-        <div class="form-group">
-            <label for="catalogNameInput">Name:</label>
-            <input id="catalogNameInput" class="form-control" type = 'text' size='30' name = 'name'>
-        </div>
+<form action="{{url_for('newCatalog',global_id=global_catalog.id)}}" method='POST'>
+    <div class="form-group">
+        <label for="catalogNameInput">Name:</label>
+        <input id="catalogNameInput" class="form-control" type='text' size='30' name='name'>
+    </div>
 
-        <div class="form-group">
-            <label for="catalogImageInput">Image Link:</label>
-            <input id="catalogImageInput" class="form-control" type = 'text' size='30' name = 'image'>
-        </div>
+    <div class="form-group">
+        <label for="catalogImageInput">Image Link:</label>
+        <input id="catalogImageInput" class="form-control" type='text' size='30' name='image'>
+    </div>
 
-        <div class="form-group">
-            <label for="catalogTaglineInput">Tagline:</label>
-            <input id="catalogTaglineInput" class="form-control"  type = 'text' size='30' name = 'tagline' >
-        </div>
-        <input type="hidden" class="hidden" name="global_catalog_id" value={{global_catalog.id}}>
+    <div class="form-group">
+        <label for="catalogTaglineInput">Tagline:</label>
+        <input id="catalogTaglineInput" class="form-control" type='text' size='30' name='tagline'>
+    </div>
+    <input type="hidden" class="hidden" name="global_catalog_id" value={{global_catalog.id}}>
 
-        <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
 {% endblock %}
