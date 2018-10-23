@@ -42,7 +42,7 @@ This project is part of the
     ~~~~
 6. Add the below port config to the Vagrantfile and save:
     ~~~~
-    config.vm.network "forwarded_port", guest: 6500, host: 6500, host_ip: "127.0.0.1"
+    config.vm.network "forwarded_port", guest: 6060, host: 6060, host_ip: "127.0.0.1"
     ~~~~
 <b>Run</b>
 1. Launch Vagrant by & log in by running
@@ -58,7 +58,7 @@ This project is part of the
     ~~~~
     python lotsofproducts.py
     ~~~~
-4. Visit http://localhost:5000 in the browser to view the live application.
+4. Visit http://localhost:6060 in the browser to view the live application.
 ## Under the hood
 <b>Database</b>
 
