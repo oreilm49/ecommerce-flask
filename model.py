@@ -12,17 +12,18 @@ class ProductModel():
     def createProduct(self, product, user):
         DBSession = sessionmaker(bind=engine)
         session = DBSession()
-        catalog = session.query(Catalog).filter_by(id=product['catalog_id']).one()
+        catalog = session.query(Catalog).filter_by(
+                  id=product['catalog_id']).one()
         newProduct = Product(
-                    images = product['images'],
-                    header = product['header'],
-                    model = product['model'],
-                    price = product['price'],
-                    brand = product['brand'],
-                    description = product['description'],
-                    specs = product['specs'],
-                    catalog_id = catalog.id,
-                    user_id = user
+                        images=product['images'],
+                        header=product['header'],
+                        model=product['model'],
+                        price=product['price'],
+                        brand=product['brand'],
+                        description=product['description'],
+                        specs=product['specs'],
+                        catalog_id=catalog.id,
+                        user_id=user
                     )
         try:
             session.add(newProduct)
@@ -31,7 +32,7 @@ class ProductModel():
         except exc.SQLAlchemyError:
             return "Product not created"
 
-    def products(self,category):
+    def products(self, category):
         DBSession = sessionmaker(bind=engine)
         session = DBSession()
         products = session.query(Product).filter_by(catalog_id=category).all()
@@ -39,14 +40,14 @@ class ProductModel():
             p.images = p.images.split(",")
         return products
 
-    def product(self,id):
+    def product(self, id):
         DBSession = sessionmaker(bind=engine)
         session = DBSession()
         product = session.query(Product).filter_by(id=id).one()
         product.images = product.images.split(",")
         return product
 
-    def updateProduct(self,product):
+    def updateProduct(self, product):
         DBSession = sessionmaker(bind=engine)
         session = DBSession()
         print(product)
@@ -72,14 +73,14 @@ class ProductModel():
         except exc.SQLAlchemyError:
             return "Product with id %s not updated" % id
 
-    def deleteProduct(self,id):
+    def deleteProduct(self, id):
         DBSession = sessionmaker(bind=engine)
         session = DBSession()
         try:
             session.query(Product).filter_by(id=id).delete()
             session.commit()
             return "Product with id of %s deleted" % id
-        except:
+        except exc.SQLAlchemyError:
             return "SQL Error: roduct with id of %s not deleted"
 
 
@@ -98,7 +99,7 @@ class CatalogModel():
             image=image,
             tagline=tagline,
             global_catalog_id=global_catalog_id,
-            user_id = user_id
+            user_id=user_id
             )
         try:
             session.add(newCatalog)
@@ -123,7 +124,7 @@ class CatalogModel():
         try:
             catalog = session.query(Catalog).filter_by(id=id).one()
             return catalog
-        except:
+        except exc.SQLAlchemyError:
             return "Catalog with id %s not found" % id
 
     def updateCatalog(self, catalog):
@@ -145,7 +146,6 @@ class CatalogModel():
         except exc.SQLAlchemyError:
             return "Catalog with id %s not updated" % id
 
-
     def deleteCatalog(self, id):
         DBSession = sessionmaker(bind=engine)
         session = DBSession()
@@ -153,7 +153,7 @@ class CatalogModel():
             session.query(Catalog).filter_by(id=id).delete()
             session.commit()
             return "Catalog with id of %s deleted" % id
-        except:
+        except exc.SQLAlchemyError:
             return "SQL Error: catalog with id of %s not deleted"
 
 
@@ -188,13 +188,14 @@ class GlobalCatalogModel():
         try:
             catalog = session.query(Global_catalog).filter_by(id=id).one()
             return catalog
-        except:
+        except exc.SQLAlchemyError:
             return "Global_catalog with id %s not found" % id
 
     def updateGlobalCatalog(self, catalog):
         DBSession = sessionmaker(bind=engine)
         session = DBSession()
-        dbcatalog = session.query(Global_catalog).filter_by(id=catalog['id']).one()
+        dbcatalog = session.query(Global_catalog).filter_by(
+                    id=catalog['id']).one()
         if catalog['name']:
             dbcatalog.name = catalog['name']
         elif catalog['tagline']:
@@ -210,7 +211,6 @@ class GlobalCatalogModel():
         except exc.SQLAlchemyError:
             return "Global_catalog with id %s not updated" % id
 
-
     def deleteGlobalCatalog(self, id):
         DBSession = sessionmaker(bind=engine)
         session = DBSession()
@@ -218,7 +218,7 @@ class GlobalCatalogModel():
             session.query(Global_catalog).filter_by(id=id).delete()
             session.commit()
             return "Global_catalog with id of %s deleted" % id
-        except:
+        except exc.SQLAlchemyError:
             return "SQL Error: Global_catalog with id of %s not deleted"
 
 
@@ -228,8 +228,8 @@ class UserModel():
         DBSession = sessionmaker(bind=engine)
         session = DBSession()
         newUser = User(
-            name = user['username'],
-            email = user['email'],
+            name=user['username'],
+            email=user['email'],
         )
         session.add(newUser)
         session.commit()
@@ -248,7 +248,7 @@ class UserModel():
         try:
             user = session.query(User).filter_by(email=email).one()
             return user.id
-        except:
+        except exc.SQLAlchemyError:
             return None
 
 
@@ -279,12 +279,10 @@ class Workers():
         return json
 
     def checkAuth(self, creator_id, login_session):
-        print(creator_id)
-        print(login_session['user_id'])
         try:
             creator = UserModel().user(creator_id)
             if creator.id != login_session['user_id']:
                 return False
             return True
-        except:
+        except NameError:
             return False

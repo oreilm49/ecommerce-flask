@@ -7,3 +7,5 @@
 products.json
 
 scraper/.scrapy/httpcache
+
+login.py

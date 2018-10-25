@@ -5,6 +5,7 @@ from model import GlobalCatalogModel, Workers
 from sqlalchemy import create_engine, exc
 from sqlalchemy.orm import sessionmaker
 from database import Catalog, Product, Base
+from functools import wraps
 
 # Login Imports
 from flask import session as login_session
@@ -25,6 +26,17 @@ def checkLogin():
         return False
     else:
         return True
+
+
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if 'username' in login_session:
+            return f(*args, **kwargs)
+        else:
+            flash("Login required", "error")
+            return redirect('/login')
+    return decorated_function
 
 
 @app.route('/login')
@@ -231,9 +243,8 @@ def catalogsJSON():
 
 # Admin home route
 @app.route('/admin')
+@login_required
 def adminHome():
-    if 'username' not in login_session:
-        return redirect('/login')
     catalogs = Workers().getNavLinks()
     print(login_session)
     return render_template('admin/index.html', catalogs=catalogs)
@@ -241,9 +252,8 @@ def adminHome():
 
 # Admin category edit route
 @app.route('/admin/catalog/<int:catalog_id>', methods=['GET', 'POST'])
+@login_required
 def adminCatalog(catalog_id):
-    if 'username' not in login_session:
-        return redirect('/login')
     catalog = CatalogModel().catalog(catalog_id)
     if request.method == 'POST':
         if Workers().checkAuth(catalog.user_id, login_session):
@@ -260,9 +270,8 @@ def adminCatalog(catalog_id):
 
 # Admin category delete route
 @app.route('/admin/catalog/<int:catalog_id>/delete', methods=['GET', 'POST'])
+@login_required
 def deleteCatalog(catalog_id):
-    if 'username' not in login_session:
-        return redirect('/login')
     catalog = CatalogModel().catalog(catalog_id)
     if request.method == 'POST':
         if Workers().checkAuth(catalog.user_id, login_session):
@@ -279,9 +288,8 @@ def deleteCatalog(catalog_id):
 
 # Admin new category route
 @app.route('/admin/<global_id>/catalog/new', methods=['GET', 'POST'])
+@login_required
 def newCatalog(global_id):
-    if 'username' not in login_session:
-        return redirect('/login')
     if request.method == 'POST':
         CatalogModel().createCatalog(request.form, login_session['user_id'])
         flash("Catalog created sucessfully")
@@ -294,9 +302,8 @@ def newCatalog(global_id):
 
 # Admin category products view
 @app.route('/admin/catalog/<int:catalog_id>/products')
+@login_required
 def adminProducts(catalog_id):
-    if 'username' not in login_session:
-        return redirect('/login')
     products = ProductModel().products(catalog_id)
     catalog = CatalogModel().catalog(catalog_id)
     return render_template('admin/products.html',
@@ -306,9 +313,8 @@ def adminProducts(catalog_id):
 # Admin products edit route
 @app.route('/admin/catalog/<int:catalog_id>/product/<int:product_id>',
            methods=['GET', 'POST'])
+@login_required
 def productView(catalog_id, product_id):
-    if 'username' not in login_session:
-        return redirect('/login')
     catalog = CatalogModel().catalog(catalog_id)
     product = ProductModel().product(product_id)
     if request.method == 'POST':
@@ -329,9 +335,8 @@ def productView(catalog_id, product_id):
 # Admin product delete route
 @app.route('/admin/catalog/<int:catalog_id>/product/<int:product_id>/delete',
            methods=['GET', 'POST'])
+@login_required
 def deleteProduct(catalog_id, product_id):
-    if 'username' not in login_session:
-        return redirect('/login')
     catalog = CatalogModel().catalog(catalog_id)
     product = ProductModel().product(product_id)
     if request.method == 'POST':
@@ -352,9 +357,8 @@ def deleteProduct(catalog_id, product_id):
 # Admin new product route
 @app.route('/admin/catalog/<int:catalog_id>/product/new',
            methods=['GET', 'POST'])
+@login_required
 def newProduct(catalog_id):
-    if 'username' not in login_session:
-        return redirect('/login')
     if request.method == 'POST':
         ProductModel().createProduct(request.form, login_session['user_id'])
         flash("Product sucessfully created")
@@ -368,9 +372,8 @@ def newProduct(catalog_id):
 # Admin user crud route
 @app.route('/admin/user/<int:user_id>',
            methods=['GET', 'PUT', 'POST', 'DELETE'])
+@login_required
 def userView(user_id):
-    if 'username' not in login_session:
-        return redirect('/login')
     user = UserModel().user(user_id)
     if request.method == 'PUT':
         UserModel().updateUser(request.form)
