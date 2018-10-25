@@ -1,6 +1,6 @@
 from sqlalchemy import create_engine, exc
 from sqlalchemy.orm import sessionmaker
-from database import Catalog, Product, Base, Global_catalog
+from database import Catalog, Product, Base, Global_catalog, User
 
 
 engine = create_engine('sqlite:///ecommerceapp.db')
@@ -9,10 +9,9 @@ Base.metadata.bind = engine
 
 # CRUD Products
 class ProductModel():
-    def createProduct(self, product):
+    def createProduct(self, product, user):
         DBSession = sessionmaker(bind=engine)
         session = DBSession()
-        print(product)
         catalog = session.query(Catalog).filter_by(id=product['catalog_id']).one()
         newProduct = Product(
                     images = product['images'],
@@ -22,7 +21,9 @@ class ProductModel():
                     brand = product['brand'],
                     description = product['description'],
                     specs = product['specs'],
-                    catalog_id = catalog.id)
+                    catalog_id = catalog.id,
+                    user_id = user
+                    )
         try:
             session.add(newProduct)
             session.commit()
@@ -81,20 +82,23 @@ class ProductModel():
         except:
             return "SQL Error: roduct with id of %s not deleted"
 
+
 # CRUD Catalog
 class CatalogModel():
-    def createCatalog(self, catalog):
+    def createCatalog(self, catalog, user):
         DBSession = sessionmaker(bind=engine)
         session = DBSession()
         name = catalog['name']
         image = catalog['image']
         tagline = catalog['tagline']
         global_catalog_id = catalog['global_catalog_id']
+        user_id = user
         newCatalog = Catalog(
             name=name,
             image=image,
             tagline=tagline,
-            global_catalog_id=global_catalog_id
+            global_catalog_id=global_catalog_id,
+            user_id = user_id
             )
         try:
             session.add(newCatalog)
@@ -151,6 +155,7 @@ class CatalogModel():
             return "Catalog with id of %s deleted" % id
         except:
             return "SQL Error: catalog with id of %s not deleted"
+
 
 # CRUD Catalog
 class GlobalCatalogModel():
@@ -220,19 +225,31 @@ class GlobalCatalogModel():
 # CRUD User
 class UserModel():
     def createUser(self, user):
-        return "User created"
+        DBSession = sessionmaker(bind=engine)
+        session = DBSession()
+        newUser = User(
+            name = user['username'],
+            email = user['email'],
+        )
+        session.add(newUser)
+        session.commit()
+        user = session.query(User).filter_by(email=user['email']).one()
+        return user.id
 
-    def users(self,category):
-        return "Users"
+    def user(self, id):
+        DBSession = sessionmaker(bind=engine)
+        session = DBSession()
+        user = session.query(User).filter_by(id=id).one()
+        return user
 
-    def user(self,id):
-        return "User"
-
-    def updateUser(self,product):
-        return "User updated"
-
-    def deleteUser(self,id):
-        return "User deleted"
+    def getUserID(self, email):
+        DBSession = sessionmaker(bind=engine)
+        session = DBSession()
+        try:
+            user = session.query(User).filter_by(email=email).one()
+            return user.id
+        except:
+            return None
 
 
 class Workers():
@@ -260,3 +277,14 @@ class Workers():
             for c in catalogs:
                 json.append(c.serialize)
         return json
+
+    def checkAuth(self, creator_id, login_session):
+        print(creator_id)
+        print(login_session['user_id'])
+        try:
+            creator = UserModel().user(creator_id)
+            if creator.id != login_session['user_id']:
+                return False
+            return True
+        except:
+            return False

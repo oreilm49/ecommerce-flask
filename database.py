@@ -7,6 +7,22 @@ import sqlalchemy_jsonfield
 
 Base = declarative_base()
 
+class User(Base):
+    __tablename__ = 'user'
+    id = Column(Integer, primary_key = True)
+    name = Column(String(80), nullable = False)
+    email = Column(String(250), nullable = False)
+    password = Column(String(250), nullable = True)
+    catalogs = relationship("Catalog")
+    products = relationship("Product")
+    @property
+    def serialize(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'email': self.email,
+        }
+
 class Global_catalog(Base):
     __tablename__ = 'global'
     id = Column(Integer, primary_key = True)
@@ -31,6 +47,8 @@ class Catalog(Base):
     tagline = Column(String(250))
     global_catalog_id = Column(Integer, ForeignKey('global.id'))
     products = relationship("Product")
+    user_id = Column(Integer, ForeignKey('user.id'))
+    user = relationship(User)
     @property
     def serialize(self):
         return {
@@ -53,6 +71,7 @@ class Product(Base):
     description = Column(String(250), nullable = True)
     specs = Column(sqlalchemy_jsonfield.JSONField(), nullable = False)
     catalog_id = Column(Integer, ForeignKey('catalog.id'))
+    user_id = Column(Integer, ForeignKey('user.id'))
     @property
     def serialize(self):
         return {
@@ -65,20 +84,6 @@ class Product(Base):
             'description': self.description,
             'specs': self.specs,
             'catalog': self.catalog_id
-        }
-
-class User(Base):
-    __tablename__ = 'user'
-    id = Column(Integer, primary_key = True)
-    name = Column(String(80), nullable = False)
-    email = Column(String(250), nullable = False)
-    password = Column(String(250), nullable = False)
-    @property
-    def serialize(self):
-        return {
-            'id': self.id,
-            'name': self.name,
-            'email': self.email,
         }
 
 

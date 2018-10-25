@@ -41,6 +41,7 @@ for product in products_dict:
         try:
             session.add(Catalog(
                 name=product['category'],
+                user_id=1,
                 global_catalog_id = session.query(Global_catalog).filter_by(name=product['global_category']).one().id
                 ))
             session.commit()
@@ -69,7 +70,8 @@ for product in products_dict:
                     brand = product['brand'],
                     description = product['description'],
                     specs = product['specs'],
-                    catalog_id = catalog_id
+                    catalog_id = catalog_id,
+                    user_id=1
                     ))
             session.commit()
             print("Model added %s") % product['model']

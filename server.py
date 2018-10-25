@@ -1,6 +1,6 @@
-from flask import Flask, render_template, request, url_for,
+from flask import Flask, render_template, request, url_for
 from flask import redirect, flash, jsonify, make_response
-from model import ProductModel, CatalogModel, UserModel,
+from model import ProductModel, CatalogModel, UserModel
 from model import GlobalCatalogModel, Workers
 from sqlalchemy import create_engine, exc
 from sqlalchemy.orm import sessionmaker
@@ -113,6 +113,11 @@ def gconnect():
     login_session['username'] = data['name']
     login_session['picture'] = data['picture']
     login_session['email'] = data['email']
+
+    user_id = UserModel().getUserID(login_session['email'])
+    if not user_id:
+        user_id = UserModel().createUser(login_session)
+    login_session['user_id'] = user_id
 
     output = ''
     output += '<h1>Welcome, '
@@ -241,10 +246,14 @@ def adminCatalog(catalog_id):
         return redirect('/login')
     catalog = CatalogModel().catalog(catalog_id)
     if request.method == 'POST':
-        CatalogModel().updateCatalog(request.form)
-        catalog = CatalogModel().catalog(catalog_id)
-        flash("Catalog edited sucessfully")
-        return render_template('admin/catalog.html', catalog=catalog)
+        if Workers().checkAuth(catalog.user_id, login_session):
+            CatalogModel().updateCatalog(request.form)
+            catalog = CatalogModel().catalog(catalog_id)
+            flash("Catalog edited sucessfully")
+            return render_template('admin/catalog.html', catalog=catalog)
+        else:
+            flash("Catalog can only be edited by creator", "error")
+            return render_template('admin/catalog.html', catalog=catalog)
     else:
         return render_template('admin/catalog.html', catalog=catalog)
 
@@ -256,9 +265,13 @@ def deleteCatalog(catalog_id):
         return redirect('/login')
     catalog = CatalogModel().catalog(catalog_id)
     if request.method == 'POST':
-        CatalogModel().deleteCatalog(catalog_id)
-        flash("Catalog deleted sucessfully")
-        return redirect("/admin")
+        if Workers().checkAuth(catalog.user_id, login_session):
+            CatalogModel().deleteCatalog(catalog_id)
+            flash("Catalog deleted sucessfully")
+            return redirect("/admin")
+        else:
+            flash("Catalog can only be deleted by creator", "error")
+            return render_template('admin/catalog.html', catalog=catalog)
 
     else:
         return render_template('admin/deleteCatalog.html', catalog=catalog)
@@ -270,7 +283,7 @@ def newCatalog(global_id):
     if 'username' not in login_session:
         return redirect('/login')
     if request.method == 'POST':
-        CatalogModel().createCatalog(request.form)
+        CatalogModel().createCatalog(request.form, login_session['user_id'])
         flash("Catalog created sucessfully")
         return redirect("/admin")
     else:
@@ -297,10 +310,15 @@ def productView(catalog_id, product_id):
     if 'username' not in login_session:
         return redirect('/login')
     catalog = CatalogModel().catalog(catalog_id)
+    product = ProductModel().product(product_id)
     if request.method == 'POST':
-        ProductModel().updateProduct(request.form)
-        flash("Product sucessfully edited")
-        return redirect(url_for('adminProducts', catalog_id=catalog_id))
+        if Workers().checkAuth(product.user_id, login_session):
+            ProductModel().updateProduct(request.form)
+            flash("Product sucessfully edited")
+            return redirect(url_for('adminProducts', catalog_id=catalog_id))
+        else:
+            flash("Product can only be edited by creator", "error")
+            return redirect(url_for('adminProducts', catalog_id=catalog_id))
     else:
         product = ProductModel().product(product_id)
         catalog = CatalogModel().catalog(catalog_id)
@@ -315,10 +333,15 @@ def deleteProduct(catalog_id, product_id):
     if 'username' not in login_session:
         return redirect('/login')
     catalog = CatalogModel().catalog(catalog_id)
+    product = ProductModel().product(product_id)
     if request.method == 'POST':
-        ProductModel().deleteProduct(product_id)
-        flash("Product sucessfully deleted")
-        return redirect(url_for('adminProducts', catalog_id=catalog_id))
+        if Workers().checkAuth(product.user_id, login_session):
+            ProductModel().deleteProduct(product_id)
+            flash("Product sucessfully deleted")
+            return redirect(url_for('adminProducts', catalog_id=catalog_id))
+        else:
+            flash("Product can only be deleted by creator", "error")
+            return redirect(url_for('adminProducts', catalog_id=catalog_id))
     else:
         product = ProductModel().product(product_id)
         catalog = CatalogModel().catalog(catalog_id)
@@ -333,8 +356,9 @@ def newProduct(catalog_id):
     if 'username' not in login_session:
         return redirect('/login')
     if request.method == 'POST':
-        ProductModel().createProduct(request.form)
+        ProductModel().createProduct(request.form, login_session['user_id'])
         flash("Product sucessfully created")
+        print("Product created by user: %s" % login_session['user_id'])
         return redirect(url_for('adminProducts', catalog_id=catalog_id))
     else:
         catalog = CatalogModel().catalog(catalog_id)
@@ -361,4 +385,4 @@ def userView(user_id):
 if __name__ == '__main__':
     app.secret_key = 'super_secret_key'
     app.debug = True
-    app.run(host='0.0.0.0', port=6060)
+    app.run(host='0.0.0.0', port=5000)
