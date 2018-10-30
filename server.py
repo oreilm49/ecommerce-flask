@@ -19,6 +19,8 @@ import requests
 import os
 __location__ = os.path.realpath(
     os.path.join(os.getcwd(), os.path.dirname(__file__)))
+
+
 app = Flask(__name__)
 
 

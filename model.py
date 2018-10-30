@@ -3,7 +3,7 @@ from sqlalchemy.orm import sessionmaker
 from database import Catalog, Product, Base, Global_catalog, User
 
 
-engine = create_engine('sqlite:///ecommerceapp.db')
+engine = create_engine('postgresql://postgres:access_834@localhost/ecommerce')
 Base.metadata.bind = engine
 
 

@@ -95,6 +95,6 @@ class Product(Base):
         }
 
 
-engine = create_engine('sqlite:///ecommerceapp.db')
+engine = create_engine('postgresql://postgres:access_834@localhost/ecommerce')
 Base.metadata.create_all(engine)
 DBSession = sessionmaker(bind=engine)

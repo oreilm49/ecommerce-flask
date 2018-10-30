@@ -7,7 +7,7 @@ __location__ = os.path.realpath(
     os.path.join(os.getcwd(), os.path.dirname(__file__)))
 
 
-engine = create_engine('sqlite:///ecommerceapp.db')
+engine = create_engine('postgresql://postgres:access_834@localhost/ecommerce')
 Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
