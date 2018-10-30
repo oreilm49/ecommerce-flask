@@ -2,6 +2,9 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 import json
 from database import Base, Product, Catalog, User, Global_catalog
+import os
+__location__ = os.path.realpath(
+    os.path.join(os.getcwd(), os.path.dirname(__file__)))
 
 
 engine = create_engine('sqlite:///ecommerceapp.db')
@@ -10,7 +13,9 @@ DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
 
-with open('ecommerce_output.json', 'r') as f:
+
+with open(os.path.join(__location__, 'ecommerce_output.json')
+    , 'r') as f:
     products_dict = json.load(f)
 
 session.query(Product).delete()
