@@ -16,7 +16,9 @@ from oauth2client.client import FlowExchangeError
 import httplib2
 import json
 import requests
-
+import os
+__location__ = os.path.realpath(
+    os.path.join(os.getcwd(), os.path.dirname(__file__)))
 app = Flask(__name__)
 
 
@@ -51,7 +53,8 @@ def showLogin():
 
 
 CLIENT_ID = json.loads(
-    open('client_secrets.json', 'r').read())['web']['client_id']
+    open(os.path.join(__location__, 'client_secrets.json'),
+         'r').read())['web']['client_id']
 
 
 @app.route('/gconnect', methods=['POST'])
