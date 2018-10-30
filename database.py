@@ -53,7 +53,7 @@ class Catalog(Base):
     tagline = Column(String(250))
     global_catalog_id = Column(Integer, ForeignKey('global.id'))
     products = relationship("Product")
-    user_id = Column(Integer, ForeignKey('user.id'))
+    user_id = Column(Integer, ForeignKey('users.id'))
     user = relationship(User)
 
     @property
@@ -78,7 +78,7 @@ class Product(Base):
     description = Column(String(250), nullable=True)
     specs = Column(sqlalchemy_jsonfield.JSONField(), nullable=False)
     catalog_id = Column(Integer, ForeignKey('catalog.id'))
-    user_id = Column(Integer, ForeignKey('user.id'))
+    user_id = Column(Integer, ForeignKey('users.id'))
 
     @property
     def serialize(self):
