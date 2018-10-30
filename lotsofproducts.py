@@ -12,6 +12,8 @@ Base.metadata.bind = engine
 DBSession = sessionmaker(bind=engine)
 session = DBSession()
 
+session.add(User(name='Mark',email='markoreilly1992@gmail.com'))
+session.commit()
 
 
 with open(os.path.join(__location__, 'ecommerce_output.json')
