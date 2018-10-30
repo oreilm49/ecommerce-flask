@@ -70,7 +70,7 @@ class Catalog(Base):
 class Product(Base):
     __tablename__ = 'product'
     id = Column(Integer, primary_key=True)
-    images = Column(String(250), nullable=False)
+    images = Column(String, nullable=False)
     header = Column(String(250), nullable=False)
     model = Column(String(250), nullable=False)
     price = Column(String(80), nullable=False)
